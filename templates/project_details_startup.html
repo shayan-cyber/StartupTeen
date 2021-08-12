@@ -1,0 +1,530 @@
+{% extends "startup_dashboard_main.html" %}
+{% load static %}
+
+{% load humanize %}
+{% block sidebar %}
+
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Startup Dashboard <sup>2</sup></div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item ">
+        <a class="nav-link" href="index.html">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Utilities
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item ">
+        <a class="nav-link " href="{% url 'add_project' %}">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add Project</span>
+        </a>
+
+    </li>
+
+    <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item active">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+            aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Projects</span>
+        </a>
+        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Projects :</h6>
+
+                {% for i in startup.startup_project_set.all %}
+                <a class="collapse-item" href="{% url 'project_details_startup' i.pk %}">{{i.name}}</a>
+
+                {% endfor %}
+
+
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Addons
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item ">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFormfields"
+            aria-expanded="true" aria-controls="collapseFormfields">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Build Form</span>
+        </a>
+        <div id="collapseFormfields" class="collapse" aria-labelledby="headingFormfields"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Projects :</h6>
+
+                {% for i in startup.startup_project_set.all %}
+                <a class="collapse-item" href="{% url 'add_form_field' i.pk %}">{{i.name}}</a>
+
+                {% endfor %}
+
+
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Charts -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'add_skills' %}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Add Skills</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'add_tags' %}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Add Tags</span></a>
+    </li>
+
+    <!-- Nav Item - Tables -->
+    <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Tables</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+    <!-- Sidebar Message -->
+    <div class="sidebar-card d-none d-lg-flex">
+        <img class="sidebar-card-illustration mb-2" src="{% static 'img/undraw_rocket.svg' %}" alt="...">
+        <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!
+        </p>
+        <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+    </div>
+
+</ul>
+
+{% endblock sidebar %}
+
+{% block container %}
+{% if 1 > set_fields|length %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>Warning</strong> You should Have an application form for this project
+    <a href="{% url 'add_form_field' project.id %}" class="alert-link">Build a form >></a>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% endif %}
+
+
+<div class="col-lg-12 mt-2 mb-4">
+
+    <!-- Illustrations -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <div>
+
+                <h5 class="m-0 font-weight-bold text-primary">{{project.name}} <span
+                        class="badge badge-pill badge-info"> {{project.community.name}}</span></h5>
+
+            </div>
+
+            <div>
+                <small>{{project.time}}</small>
+            </div>
+
+
+
+        </div>
+        <div class="card-body">
+            {% if project.complete %}
+
+            <h5><span class="badge badge-success">Complete</span></h5>
+            {% else %}
+            <h5> <span class="badge badge-warning">Pending</span></h5>
+
+            {% endif %}
+
+
+            <div class="project-description mt-2">
+
+                <h6 class="font-weight-bold text-primary">Details</h6>
+                <p>{{project.project_details}}</p>
+            </div>
+            <div class="requirement">
+                <h6 class="font-weight-bold text-primary">Requirements</h6>
+                <p>{{project.requirement}}</p>
+            </div>
+            <div class="skills">
+                <div class="list-group mb-3">
+                    <button type="button" class="list-group-item list-group-item-action active">
+                        SKills
+                    </button>
+                    {% for j in project.skill_set.all %}
+                    <button type="button" class="list-group-item list-group-item-action">{{j.name}}</button>
+
+                    {% endfor %}
+
+
+                </div>
+            </div>
+            <div class="tags mb-3">
+                {% for k in project.tags.all %}
+
+                <a style="text-decoration: none; padding: 0.5rem" href="#"> #{{k.name}}</a>
+
+                {% endfor %}
+
+            </div>
+            {% if 1 > set_fields|length %}
+            <a style="color: #e74a3b;" rel="nofollow" href="{% url 'add_form_field' project.id %}">Make An Apply Form
+                &rarr;</a>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- Approach -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <button class="btn btn-outline-primary text-left" type="button" data-toggle="collapse"
+                data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <h6 class="m-0 font-weight-bold text-dark">Form Design >></h6>
+            </button>
+
+        </div>
+        <div id="collapseOne" class="card-body collapse ">
+            <div class="container mt-1 mb-5">
+
+
+                <div>
+                    <div class="form-layout ">
+                        {% for field in set_fields %}
+                        <label for="exampleInputEmail1" class="form-label">{{field.label}}</label>
+                        <div class="row">
+                            {% if field.type_of == 'CF' %}
+                            <div class="col-sm-10 mb-3">
+                                <input type="text" class="form-control" id="exampleInputEmail1" />
+                            </div>
+                            <div class="col-sm-2 mb-3">
+                                <a href="{% url 'delete_field' field.pk %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="margin-top: 0.2rem;" width="20"
+                                        height="20" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path
+                                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </a>
+                            </div>
+                            {% elif field.type_of == 'TF' %}
+                            <div class="col-sm-10 mb-3">
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                            <div class="col-sm-2 mb-3">
+                                <a href="{% url 'delete_field' field.pk %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="margin-top: 0.2rem" width="20"
+                                        height="20" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path
+                                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </a>
+                            </div>
+                            {% elif field.type_of == 'FF' %}
+                            <div class="col-sm-10 mb-3">
+                                <input type="file" />
+                            </div>
+                            <div class="col-sm-2 mb-3">
+                                <a href="{% url 'delete_field' field.pk %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="margin-top: 0.2rem" width="20"
+                                        height="20" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path
+                                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </a>
+                            </div>
+                            {% elif field.type_of == 'IF' %}
+                            <div class="col-sm-10 mb-3">
+                                <input type="number" class="form-control" id="exampleInputEmail1" />
+                            </div>
+                            <div class="col-sm-2 mb-3">
+                                <a href="{% url 'delete_field' field.pk %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="margin-top: 0.2rem" width="20"
+                                        height="20" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path
+                                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <a href="{% url 'add_form_field' project.id %}" class="btn btn-primary  btn-block">Edit</a>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Applications </h6>
+    </div>
+    <div style="overflow-y: scroll; max-height:50vh;" class="card-body ">
+
+        {% if 1 > set_fields|length %}
+
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Warning!!</strong> You should Have an application form for this project
+            <a href="{% url 'add_form_field' project.id %}" class="alert-link">Build a form >></a>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        {% else %}
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Approval</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for i, field_ in sub_data.items %}
+                {% if i.profile in field_.0.project_of.approved_participants.all %}
+                <tr class="bg-light">
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td class="text-success">{{i.username}}</td>
+                    <td>{{field_.0.time|naturaltime}}</td>
+                    <td><button type="button" class="btn btn-success" data-toggle="modal"
+                            data-target="#detailsModal{{i.username}}">Details</button></td>
+                    <td>
+                        <div class="form-check">
+                            <img src="https://img.icons8.com/color-glass/38/000000/checked-checkbox.png"/>
+
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+
+                <tr class="bg">
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{i.username}}</td>
+                    <td>{{field_.0.time|naturaltime}}</td>
+                    <td><button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#detailsModal{{i.username}}">Details</button></td>
+                    <td>
+                        <div class="form-check">
+                            <input style="width:1rem;height:1rem" class="form-check-input approve_check" type="checkbox"
+                                value="{{i.username}}" id="approval_check">
+
+                        </div>
+                    </td>
+                </tr>
+                  
+                {% endif %}
+                
+
+
+                <div class="modal fade" id="detailsModal{{i.username}}" tabindex="-1" aria-labelledby="detailsModalLabel{{i.username}}"
+                    aria-hidden="true">
+                    <div style="max-width: 50vw;"
+                        class="modal-dialog modal-dialog-scrollable modal-dialog-centered p-5">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="detailsModalLabel{{i.username}}">{{i.username}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="card border-primary mb-3">
+                                    <div class="card-header">Details</div>
+                                    <div class="card-body text-dark">
+                                        {% for field in field_ %}
+                                        <h5 style="font-size:0.9rem; font-weight:bold; margin-bottom: 1rem; margin-top:1rem"
+                                            class="card-title text-primary ">{{field.field_of.label}}</h5>
+                                        {% if field.field_of.type_of == 'CF' %}
+
+
+                                        <div class="text-bg">
+
+                                            <p class="card-text">{{field.char_field}}</p>
+
+                                        </div>
+                                        {% elif field.field_of.type_of == 'TF' %}
+                                        <div class="text-bg">
+
+                                            <p class="card-text">{{field.text_field}}</p>
+
+                                        </div>
+                                        {% elif field.field_of.type_of == 'FF' %}
+
+                                        <div class="text-bg">
+                                            <a href="{{field.file_field.url}}" class="" download="logo">Download</a>
+
+
+                                        </div>
+                                        {% elif field.field_of.type_of == 'IF' %}
+                                        <div class="text-bg">
+
+                                            <p class="card-text">{{field.int_field}}</p>
+
+                                        </div>
+                                        {% endif %}
+                                        {% endfor %}
+
+
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+              </tr> -->
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+    <div class="card-footer text-muted">
+        <button onclick="approval()" type="button" class="btn btn-outline-primary btn-sm btn-block">Approve</button>
+        
+    </div>
+</div>
+
+{% endblock container %}
+
+{% block js %}
+
+<script>
+    // csrf
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+
+
+
+    function approval() {
+        var approves = document.getElementsByClassName("approve_check");
+        console.log(approves.length);
+        var approves_value = [];
+        for (var i = 0; i < approves.length; i++) {
+            if (approves[i].checked) {
+                approves_value[i] = approves[i].value;
+            }
+        }
+        console.log(approves_value);
+
+
+
+
+        console.log('User is Logged In, sending data..');
+        var url = '/approval/'
+        project = {{project.pk}}
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({ 'approves_value': approves_value,'project':project })
+        })
+            .then((resp) => {
+                return resp.json()
+            })
+            .then((data) => {
+                console.log(data);
+                window.location.reload();
+            })
+
+
+
+    }
+
+
+
+</script>
+
+{% endblock js %}

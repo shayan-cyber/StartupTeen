@@ -1,0 +1,152 @@
+{% extends "base.html" %} {% block container %} {% load humanize %}
+<div class="container mt-5">
+  <div class="container">
+    <div class="feature col">
+      <div class="feature-icon">
+        <img style="height: 10rem; width: 10rem" src="{{community.logo.url}}" alt="" />
+      </div>
+      <br />
+      <h2>{{community.name}}</h2>
+      <p>{{community.about}}</p>
+      <span class="badge rounded-pill bg-light text-dark">
+        {{community.pk}}
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill"
+          viewBox="0 0 16 16">
+          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+          <path fill-rule="evenodd"
+            d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z" />
+          <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+        </svg>
+      </span>
+      <!-- <a href="#" class="icon-link">
+        Call to action
+        <svg class="bi" width="1em" height="1em">
+          <use xlink:href="#chevron-right"></use>
+        </svg>
+      </a> -->
+    </div>
+  </div>
+
+  <!-- title part start -->
+  <div class="container mt-5">
+    <div class="row p-3">
+      <div class="col-3">
+        <h4><strong>Activity</strong></h4>
+      </div>
+      <div class="col-6"></div>
+      <div class="col-3">
+        <a class="nav-link dropdown-toggle" href="#" id="FolderDropdown" role="button" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel"
+            viewBox="0 0 16 16">
+            <path
+              d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z" />
+          </svg>
+          Filter
+        </a>
+        <div class="dropdown-menu pt-0 mx-0 rounded-3 shadow overflow-hidden" aria-labelledby="FilterDropdown"
+          style="width: 280px">
+          <form class="p-2 mb-2 bg-light border-bottom" data-children-count="1">
+            <input type="search" class="form-control" autocomplete="false" placeholder="Type to filter..." />
+          </form>
+          <ul class="list-unstyled mb-0">
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
+                <span class="d-inline-block bg-success rounded-circle" style="width: 0.5em; height: 0.5em"></span>
+                Action
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
+                <span class="d-inline-block bg-primary rounded-circle" style="width: 0.5em; height: 0.5em"></span>
+                Another action
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
+                <span class="d-inline-block bg-danger rounded-circle" style="width: 0.5em; height: 0.5em"></span>
+                Something else here
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
+                <span class="d-inline-block bg-info rounded-circle" style="width: 0.5em; height: 0.5em"></span>
+                Separated link
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- title part end -->
+
+  <!-- projects start -->
+
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-lg-2 col-sm-1"></div>
+      <div class="col-lg-8 col-sm-10">
+        {% for project in projects %}
+
+
+
+        <div class="card mb-3 box-shadow linked_box">
+
+          <div class="row g-0">
+            <div class="col-md-4 p-4">
+              <img style="border-radius: 2rem; height: 100%; object-fit: cover"
+                src="{{project.startup.startupimage_set.all.0.image.url}}" class="img-fluid rounded-start" alt="..." />
+            </div>
+            <div class="col-md-8">
+              <a href="{% url 'project' project.id %}">
+                <div class="card-body pt-4">
+                  <h5 class="card-title">{{project.startup.name}}</h5>
+                  <p class="card-text">
+                    <strong style="font-size: larger">Project : </strong>{{project.name}}
+                  </p>
+
+                  <p class="card-text"><strong>Skills : </strong></p>
+                  {% for i in project.skill_set.all %}
+                  <span class="badge rounded-pill bg-secondary text-light">{{i.name}}</span>
+
+                  {% endfor %}
+                  <br />
+                  <br />
+
+
+                  {% for j in project.tags.all %}
+                  <a style="text-decoration: none; padding: 0.5rem; color: #0d6efd; font-weight: bold;" href="#">
+                    #{{j.name}}</a>
+
+                  {% endfor %}
+
+
+                  <p class="card-text mt-2">
+                    <small class="text-muted">{{project.time|naturaltime}}</small>
+                  </p>
+
+
+                  <div class="d-grid gap-2">
+                    <a href="{% url 'project' project.id %}" class="btn btn-outline-primary mt-2">Check</a>
+                  </div>
+                  <br>
+                </div>
+              </a>
+
+            </div>
+          </div>
+        </div>
+
+
+
+        {% endfor %}
+      </div>
+      <div class="col-lg-2 col-sm-1"></div>
+    </div>
+  </div>
+
+  <!-- projects end -->
+</div>
+
+{% endblock container %}

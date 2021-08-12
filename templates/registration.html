@@ -1,0 +1,287 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BootstrapDash Wizard</title>
+  <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'assets/css/bd-wizard.css' %}">
+</head>
+
+<style>
+  .container_loader {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  .item {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+  }
+
+  .item-1 {
+    background-color: #FA5667;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    animation: item-1_move 1.8s cubic-bezier(.6, .01, .4, 1) infinite;
+  }
+
+  .item-2 {
+    background-color: #7A45E5;
+    top: 0;
+    right: 0;
+    animation: item-2_move 1.8s cubic-bezier(.6, .01, .4, 1) infinite;
+  }
+
+  .item-3 {
+    background-color: #1B91F7;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+    animation: item-3_move 1.8s cubic-bezier(.6, .01, .4, 1) infinite;
+  }
+
+  .item-4 {
+    background-color: #FAC24C;
+    bottom: 0;
+    left: 0;
+    animation: item-4_move 1.8s cubic-bezier(.6, .01, .4, 1) infinite;
+  }
+
+  @keyframes item-1_move {
+
+    0%,
+    100% {
+      transform: translate(0, 0)
+    }
+
+    25% {
+      transform: translate(0, 100px)
+    }
+
+    50% {
+      transform: translate(100px, 100px)
+    }
+
+    75% {
+      transform: translate(100px, 0)
+    }
+  }
+
+  @keyframes item-2_move {
+
+    0%,
+    100% {
+      transform: translate(0, 0)
+    }
+
+    25% {
+      transform: translate(-100px, 0)
+    }
+
+    50% {
+      transform: translate(-100px, 100px)
+    }
+
+    75% {
+      transform: translate(0, 100px)
+    }
+  }
+
+  @keyframes item-3_move {
+
+    0%,
+    100% {
+      transform: translate(0, 0)
+    }
+
+    25% {
+      transform: translate(0, -100px)
+    }
+
+    50% {
+      transform: translate(-100px, -100px)
+    }
+
+    75% {
+      transform: translate(-100px, 0)
+    }
+  }
+
+  @keyframes item-4_move {
+
+    0%,
+    100% {
+      transform: translate(0, 0)
+    }
+
+    25% {
+      transform: translate(100px, 0)
+    }
+
+    50% {
+      transform: translate(100px, -100px)
+    }
+
+    75% {
+      transform: translate(0, -100px)
+    }
+  }
+</style>
+
+<body>
+
+  <!-- loader start -->
+
+  <div class="container_loader">
+    <div class="item item-1"></div>
+    <div class="item item-2"></div>
+    <div class="item item-3"></div>
+    <div class="item item-4"></div>
+  </div>
+
+  <!-- loader end -->
+
+
+
+  <header style="display: none;" class="content" id="content">
+    <nav class="navbar navbar-expand-sm navbar-light bg-white">
+      <div class="container">
+        <a class="navbar-brand" href="#"><img src="{% static 'assets/images/logo.svg' %}" alt="logo"></a>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
+          aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main style="display:none !important;" class="d-flex align-items-center content_main" id="content_main">
+    <div class="container">
+      <div id="wizard">
+        <h3>Step 1 Title</h3>
+        <section>
+          <h5 class="bd-wizard-step-title">Step 1</h5>
+          <h2 class="section-heading">Select business type </h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+          <div class="purpose-radios-wrapper">
+            <div class="purpose-radio">
+              <input type="radio" name="purpose" id="branding" class="purpose-radio-input" value="Branding" checked>
+              <label for="branding" class="purpose-radio-label">
+                <span class="label-icon">
+                  <img src="{% static 'assets/images/icon_branding.svg' %}" alt="branding" class="label-icon-default">
+                  <img src="{% static 'assets/images/icon_branding_green.svg' %}" alt="branding"
+                    class="label-icon-active">
+                </span>
+                <span class="label-text">Branding</span>
+              </label>
+            </div>
+            <div class="purpose-radio">
+              <input type="radio" name="purpose" id="mobile-design" class="purpose-radio-input" value="Moile Design">
+              <label for="mobile-design" class="purpose-radio-label">
+                <span class="label-icon">
+                  <img src="{% static 'assets/images/icon_mobile_design.svg' %}" alt="branding"
+                    class="label-icon-default">
+                  <img src="{% static 'assets/images/icon_mobile_design_green.svg' %}" alt="branding"
+                    class="label-icon-active">
+                </span>
+                <span class="label-text">Moile Design</span>
+              </label>
+            </div>
+            <div class="purpose-radio">
+              <input type="radio" name="purpose" id="web-design" class="purpose-radio-input" value="Web Design">
+              <label for="web-design" class="purpose-radio-label">
+                <span class="label-icon">
+                  <img src="{% static 'assets/images/icon_web_design.svg' %}" alt="branding" class="label-icon-default">
+                  <img src="{% static 'assets/images/icon_web_design_green.svg' %}" alt="branding"
+                    class="label-icon-active">
+                </span>
+                <span class="label-text">Web Design</span>
+              </label>
+            </div>
+          </div>
+        </section>
+        <h3>Step 2 Title</h3>
+        <section>
+          <h5 class="bd-wizard-step-title">Step 2</h5>
+          <h2 class="section-heading">Enter your Account Details</h2>
+          <div class="form-group">
+            <label for="firstName" class="sr-only">First Name</label>
+            <input type="text" name="firstName" id="firstName" class="form-control" placeholder="First Name">
+          </div>
+          <div class="form-group">
+            <label for="lastName" class="sr-only">Last Name</label>
+            <input type="text" name="lastName" id="lastName" class="form-control" placeholder="Last Name">
+          </div>
+          <div class="form-group">
+            <label for="phoneNumber" class="sr-only">Phone Number</label>
+            <input type="text" name="phoneNumber" id="phoneNumber" class="form-control" placeholder="Phone Number">
+          </div>
+          <div class="form-group">
+            <label for="emailAddress" class="sr-only">Email Address</label>
+            <input type="email" name="emailAddress" id="emailAddress" class="form-control" placeholder="Email Address">
+          </div>
+        </section>
+        <h3>Step 3 Title</h3>
+        <section>
+          <h5 class="bd-wizard-step-title">Step 3</h5>
+          <h2 class="section-heading mb-5">Review your Details and Submit</h2>
+          <h6 class="font-weight-bold">Select business type</h6>
+          <p class="mb-4" id="business-type">Branding</p>
+          <h6 class="font-weight-bold">Enter your Account Details</h6>
+          <p class="mb-4"><span id="enteredFirstName">Cha</span> <span id="enteredLastName">Ji-Hun C</span> <br>
+            Phone: <span id="enteredPhoneNumber">+230-582-6609</span> <br>
+            Email: <span id="enteredEmailAddress">willms_abby@gmail.com</span></p>
+
+        </section>
+      </div>
+    </div>
+  </main>
+  <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script>
+    $(window).load(function () {
+      $(".container_loader").fadeOut(2000)
+      
+
+      setTimeout(function(){ console.log("hello"); document.getElementById("content").style.display = "block";  document.getElementById("content_main").style.display = "block" }, 2000);
+
+    })
+  </script>
+
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="{% static 'assets/js/jquery.steps.min.js' %}"></script>
+  <script src="{% static 'assets/js/bd-wizard.js' %}"></script>
+
+</body>
+
+</html>

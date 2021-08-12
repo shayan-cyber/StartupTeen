@@ -1,0 +1,125 @@
+{% extends "base.html" %}{% load humanize %}
+{% block container %}
+
+<div class="container mt-5">
+
+
+    <div class="row">
+        <div class="col-lg-6 col-sm-12">
+            <div class="row">
+                <div class="col-lg-7 col-sm-12">
+
+                    {% if startup.startupimage_set.all %}
+                    <img style="height: 20rem; width: 20rem;" class="img-fluid box-shadow" src="{{startup.startupimage_set.all.0.image.url}}" alt="">
+                    {% else %}
+                    <img style="height: 20rem; width: 20rem;" class="img-fluid box-shadow" src="https://via.placeholder.com/150" alt="">
+                      
+                    {% endif %}
+                  
+
+                </div>
+                <div  class="col-lg-5 col-sm-12 mt-5">
+                    <h2 style="font-weight: bolder;">{{startup.name}}</h2>
+                   
+                    <h4 style="font-weight:350;">{{startup.owner.user.username}}</h4>
+
+                </div>
+            </div>
+            
+            
+
+        </div>
+        <div class="col-lg-6 col-sm-12">
+
+        </div>
+    </div>
+
+    <div class="container mt-5 p-4">
+        <p style="font-size: 1.4rem;">
+            {{startup.about}}
+        </p>
+    </div>
+
+</div>
+
+
+
+
+
+<div class="container mt-5">
+    <h2><strong>Feed</strong></h2>
+
+    {% for i in latest_projects %}
+
+    <div class="card box-shadow mb-3 mt-5 p-4" >
+        <div class="row g-0">
+         
+          <div class="col-md-12">
+            <div class="card-body">
+              <h5 class="card-title">{{i.name}}</h5>
+              <span class="badge rounded-pill bg-dark text-light mb-2 mt-2">{{i.community.name}}</span>
+              <br>
+              <small>SKills Required : </small>
+              <br>
+              {% for j in i.skill_set.all %}
+                  <span class="badge rounded-pill bg-secondary text-light mt-2">{{j.name}}</span>
+
+                {% endfor %}
+                <br>
+                
+                <br>
+                  
+              <p class="card-text">{{i.project_details|truncatechars:250}}</p>
+            
+              {% for k in i.tags.all %}
+                  <a style="text-decoration: none; padding: 0.5rem; color: #0d6efd; font-weight: bold;" href="#">
+                    #{{k.name}}</a>
+
+                {% endfor %}
+                
+                <div class="d-grid gap-2 mt-2">
+                    <a href="{% url 'project' i.id %}" class="btn btn-primary" >Details</a>
+                   
+                </div>
+              <p class="card-text mt-2"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    {% endfor %}
+
+
+  
+
+</div>
+
+
+<div class="container mt-5">
+
+    <h2><strong>Past Complete Projects</strong></h2>
+
+    <div class="row mt-5">
+
+        {% for project in past_projects %}
+
+        <div class="col-lg-3 col-sm-12">
+            <div class="box-shadow p-5">
+                <h4>{{project.name}}</h4>
+                <span class="badge rounded-pill bg-dark text-light mb-2">{{project.community.name}}</span>
+                <br>
+                <p>{{project.project_details|truncatechars:100}}</p>
+                <br>
+                <small style="font-weight: lighter;">{{project.time|naturaltime}}</small>
+
+            </div>
+        </div>
+          
+        {% endfor %}
+        
+       
+    </div>
+
+</div>
+
+{% endblock container %}

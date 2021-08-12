@@ -1,0 +1,209 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Startup_teens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Varela&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+      crossorigin="anonymous"
+    />
+  </head>
+  <style>
+    body {
+      font-family: "Varela", sans-serif;
+    }
+    .box-shadow {
+      box-shadow: 2px 3px 45px -10px rgba(0, 0, 0, 0.61);
+      -webkit-box-shadow: 2px 3px 45px -10px rgba(0, 0, 0, 0.61);
+      -moz-box-shadow: 2px 3px 45px -10px rgba(0, 0, 0, 0.61);
+      border-radius: 2rem;
+    }
+    .dp {
+      box-shadow: 16px 11px 35px 5px rgba(0, 0, 0, 0.4);
+      -webkit-box-shadow: 16px 11px 35px 5px rgba(0, 0, 0, 0.4);
+      -moz-box-shadow: 16px 11px 35px 5px rgba(0, 0, 0, 0.4);
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    .linked_box:hover {
+      background-color: azure;
+    }
+    .apply-button {
+      box-shadow: -2px 9px 36px -6px rgba(0, 0, 0, 0.65);
+      -webkit-box-shadow: -2px 9px 36px -6px rgba(0, 0, 0, 0.65);
+      -moz-box-shadow: -2px 9px 36px -6px rgba(0, 0, 0, 0.65);
+    }
+    .apply-button:hover {
+      background-color: #0d6efd;
+    }
+
+    .contact_link:hover {
+      color: black;
+    }
+    .contact_link {
+      color: #0d6efd;
+    }
+
+    .form_field {
+      border: none;
+      border-bottom: 1px solid #000000;
+      background: transparent;
+      outline: none;
+    }
+  </style>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Dropdown
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link disabled"
+                href="#"
+                tabindex="-1"
+                aria-disabled="true"
+                >Disabled</a
+              >
+            </li>
+          </ul>
+          <form class="d-flex">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button class="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">{% block container %} {% endblock container %}</div>
+
+    <br />
+    <br />
+
+    <div class="container">
+      <footer
+        class="
+          d-flex
+          flex-wrap
+          justify-content-between
+          align-items-center
+          py-3
+          my-4
+          border-top
+        "
+      >
+        <p class="col-md-4 mb-0 text-muted">© 2021 Company, Inc</p>
+
+        <a
+          href="/"
+          class="
+            col-md-4
+            d-flex
+            align-items-center
+            justify-content-center
+            mb-3 mb-md-0
+            me-md-auto
+            link-dark
+            text-decoration-none
+          "
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="36"
+            height="36"
+            fill="currentColor"
+            class="bi bi-bootstrap"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M5.062 12h3.475c1.804 0 2.888-.908 2.888-2.396 0-1.102-.761-1.916-1.904-2.034v-.1c.832-.14 1.482-.93 1.482-1.816 0-1.3-.955-2.11-2.542-2.11H5.062V12zm1.313-4.875V4.658h1.78c.973 0 1.542.457 1.542 1.237 0 .802-.604 1.23-1.764 1.23H6.375zm0 3.762V8.162h1.822c1.236 0 1.887.463 1.887 1.348 0 .896-.627 1.377-1.811 1.377H6.375z"
+            />
+            <path
+              d="M0 4a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4zm4-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V4a3 3 0 0 0-3-3H4z"
+            />
+          </svg>
+        </a>
+
+        <ul class="nav col-md-4 justify-content-end">
+          <li class="nav-item">
+            <a href="#" class="nav-link px-2 text-muted">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link px-2 text-muted">Features</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link px-2 text-muted">Pricing</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link px-2 text-muted">FAQs</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link px-2 text-muted">About</a>
+          </li>
+        </ul>
+      </footer>
+    </div>
+  </body>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+    crossorigin="anonymous"
+  ></script>
+</html>
