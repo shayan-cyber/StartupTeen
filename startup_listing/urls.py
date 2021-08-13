@@ -16,5 +16,6 @@ urlpatterns = [
     path('add_form_field/<int:id>', views.add_form_field, name="add_form_field"),
     path('delete_field/<int:pk>', views.delete_field, name="delete_field"),
     path('approval/', views.approval, name="approval"),
-    path('registration/', views.registration, name="registration"),
+    path('register/', views.register, name="register"),
+    path('register_sign_up/', views.sign_up, name="register_sign_up"),
 ]

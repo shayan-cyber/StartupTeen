@@ -4,6 +4,7 @@ from django.contrib import messages
 import json
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.contrib.auth import login, authenticate, logout
 # Create your views here.
 def home(request):
     communities = Community.objects.all()
@@ -409,5 +410,54 @@ def approval(request):
         return JsonResponse({'message':'hello'})
 
 
-def registration(request):
+def register(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        # request.user.profile.type_of = da
+        if len(data.get('approves_value')) ==1:
+            request.user.profile.type_of = data['approves_value'][0]
+        elif len(data.get('approves_value')) ==2:
+            request.user.profile.type_of = data['approves_value'][1]
+        request.user.profile.save()
+        print(data)
+        return JsonResponse({'message':'hello'})
+
     return render(request,'registration.html')
+
+
+def sign_up(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        name = data['name']
+        email = data['email']
+        username = data['username']
+        password = data['password']
+        confirm_password = data['confirm_password']
+        usercheck = User.objects.filter(username =username)
+
+        if len(username)>20:
+            # messages.warning(request,"User name is too long")
+            msg = "username is too long"
+        elif usercheck:
+            # messages.warning(request, "User name already exists")
+            msg = "username already exists"
+            print("exists")
+        elif password != confirm_password:
+            # messages.warning(request, "Passwords Do not Match")
+            msg = "password does not match"
+        else:
+            user_ = User.objects.create_user(
+                first_name =name,
+                password=password,
+                username =username,
+                email = email
+            )
+            user_.save()
+            user_obj = authenticate( username= username, password = password)
+            
+            login(request,user_obj)
+            msg ="logged in"
+        print(data)
+        # return redirect('/register/')
+        return JsonResponse({'message':msg})
+

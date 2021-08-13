@@ -38,6 +38,7 @@ class Profile(models.Model):
     open_to_work = models.BooleanField(default=True)
     work_experience = models.FloatField(blank=True, null = True)
     dev_type = models.CharField(max_length=20, blank=True, null=True)
+    tags = models.ManyToManyField(Tags, blank=True, null=True)
 
     # applications = models
     def __str__(self):
