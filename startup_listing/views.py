@@ -5,6 +5,7 @@ import json
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
     communities = Community.objects.all()
@@ -24,7 +25,7 @@ def community(request, id):
 
     }
     return render(request, 'community.html', context)
-
+@login_required(login_url='/login_page')
 def project(request, id):
     project = get_object_or_404(Startup_Project, id =id)
     # event = Event.objects.filter(unique_id =unique_id)[0]
@@ -73,23 +74,38 @@ def project(request, id):
 
     return render(request, 'project.html', context)
 
+
+@login_required(login_url='/login_page')
 def profile(request, username):
-    user_obj = get_object_or_404(User, username =username)
-    profile = get_object_or_404(Profile, user = user_obj)
-    skills = Skill.objects.all()
-    prof_skills = profile.skill_set.all()
-    remaining_skills = skills.difference(prof_skills)
-    context ={
-        'profile':profile,
-        'skills':skills,
-        'remaining_skills':remaining_skills,
-        'prof_skills':prof_skills
-    }
-    return render(request, "profile.html", context)
+    if request.user.profile.type_of =="DEV":
+
+        user_obj = get_object_or_404(User, username =username)
+        profile = get_object_or_404(Profile, user = user_obj)
+        skills = Skill.objects.all()
+        prof_skills = profile.skill_set.all()
+        remaining_skills = skills.difference(prof_skills)
+        applications = Startup_Project.objects.filter(approved_participants= profile)
+        # form_field = Form_Field.objects.filter(project_of= )
+        sub_data ={}
+        for i in applications:
+            sub_data[i] = Form_Field.objects.filter(project_of= i, participant = profile)[0]
+        print(applications)
+        print(sub_data)
+        context ={
+            'profile':profile,
+            'skills':skills,
+            'remaining_skills':remaining_skills,
+            'prof_skills':prof_skills,
+            'applications': applications,
+            'sub_data':sub_data,
+        }
+        return render(request, "profile.html", context)
+    else:
+        raise Http404()
 
 
 
-
+@login_required(login_url='/login_page')
 def profile_edit(request, username):
     if request.method == "POST":
         user_obj = get_object_or_404(User, username =username)
@@ -161,15 +177,6 @@ def profile_edit(request, username):
 
             return redirect('/profile/' + str(username))
             
-
-
-
-
-
-
-
-
-
         else:
             pass
         
@@ -197,7 +204,7 @@ def startup_home(request, id):
 
 
     
-
+@login_required(login_url='/login_page')
 def add_project(request):
     if request.user.profile.startup:
         startup = request.user.profile.startup
@@ -244,7 +251,7 @@ def add_project(request):
     #404 no startup
 
 
-
+@login_required(login_url='/login_page')
 def project_details_startup(request, pk):
     project = get_object_or_404(Startup_Project,pk=pk)
     if project.startup.owner.user == request.user:
@@ -284,7 +291,7 @@ def project_details_startup(request, pk):
         return render(request, "project_details_startup.html",context)
     else:
         pass
-
+@login_required(login_url='/login_page')
 def add_skills(request):
     if request.user.profile.startup:
         startup= request.user.profile.startup
@@ -316,7 +323,7 @@ def add_skills(request):
         return render(request, "add_skills.html", {"skills":skills, 'startup':startup, 'temp':temp})
     else:
         pass
-
+@login_required(login_url='/login_page')
 def add_tags(request):
     if request.user.profile.startup:
         temp =[]
@@ -347,6 +354,8 @@ def add_tags(request):
     else:
         pass
 
+
+@login_required(login_url='/login_page')
 def add_form_field(request, id):
     
     # event = Event.objects.filter(unique_id=unique_id)[0]
@@ -372,7 +381,7 @@ def add_form_field(request, id):
     else:
         raise Http404()
 
-
+@login_required(login_url='/login_page')
 def delete_field(request,pk):
 
     type_of_field = Type_Of_Field.objects.filter(pk=pk)[0]
@@ -386,7 +395,10 @@ def delete_field(request,pk):
     else:
         raise Http404()
 
+
+@login_required(login_url='/login_page')
 def approval(request):
+    
     if request.method == "POST":
         data = json.loads(request.body)
         print("starts")
@@ -403,7 +415,10 @@ def approval(request):
                 if profile_obj in project_obj.approved_participants.all():
                     print("already in")
                 else:
-                    project_obj.approved_participants.add(profile_obj)
+                    if request.user == project_obj.startup.owner.user:
+                        project_obj.approved_participants.add(profile_obj)
+                    else:
+                        raise Http404()
 
 
 
@@ -460,4 +475,62 @@ def sign_up(request):
         print(data)
         # return redirect('/register/')
         return JsonResponse({'message':msg})
+
+
+def login_page(request):
+    if request.method == 'POST':
+        username = request.POST.get('username','')
+        password = request.POST.get('password','')
+        user_obj = authenticate( username= username, password = password)
+        login(request,user_obj)
+
+        return redirect('/register')
+
+    return render(request, 'login_page.html')
+
+@login_required(login_url='/login_page')
+def add_startup(request):
+    if request.user.profile.type_of == "OWN":
+        if request.method == 'POST':
+            name= request.POST.get('name','')
+            about = request.POST.get('about','')
+            linkedin_link = request.POST.get('linkedin_link','')
+            email = request.POST.get('email','')
+            logo = request.FILES.get('logo','')
+            owner = request.user.profile
+            startup_obj = StartUp(
+                name=name,
+                about=about,
+                linkedin_link=linkedin_link,
+                email=email,
+                
+                owner=owner,
+            )
+            startup_obj.save()
+            startup_logo = StartUpImage(
+                start_up = startup_obj,
+                image = logo
+            )
+            startup_logo.save()
+            
+            return redirect('/startup_dashboard')
+        return render(request, 'startup_add.html')
+
+    else:
+        # you dont have an owner account
+        raise Http404()
+@login_required(login_url='/login_page')
+def startup_dashboard(request):
+    startup = get_object_or_404(StartUp, owner = request.user.profile)
+    if startup:
+        startup = request.user.profile.startup
+        projects = Startup_Project.objects.filter(startup=startup)
+        context = {
+            'projects':projects,
+            'startup':startup
+        }
+        return render(request, 'startup_dashboard.html',context)
+    else:
+        #dont have startup
+        raise Http404()
 

@@ -18,4 +18,7 @@ urlpatterns = [
     path('approval/', views.approval, name="approval"),
     path('register/', views.register, name="register"),
     path('register_sign_up/', views.sign_up, name="register_sign_up"),
+    path('login_page/', views.login_page, name="login_page"),
+    path('add_startup/', views.add_startup, name="add_startup"),
+    path('startup_dashboard/', views.startup_dashboard, name="startup_dashboard")
 ]

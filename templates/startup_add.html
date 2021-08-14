@@ -1,0 +1,125 @@
+{% extends "startup_dashboard_main.html" %}
+{% load static %}
+
+
+{% block sidebar %}
+
+<ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Startup Dashboard <sup>2</sup></div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'add_startup' %}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Add Startup</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Utilities
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item ">
+        <a class="nav-link " href="{% url 'add_project' %}" >
+            <i class="fas fa-plus-circle"></i>
+            <span>Home</span>
+        </a>
+        
+    </li>
+    
+    <li class="nav-item">
+        <a class="nav-link" href="/">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Home</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+    <!-- Sidebar Message -->
+    <div class="sidebar-card d-none d-lg-flex">
+        <img class="sidebar-card-illustration mb-2" src="{% static 'img/undraw_rocket.svg' %}" alt="...">
+        <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
+        <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+    </div>
+
+</ul>
+
+{% endblock sidebar %}
+
+{% block container %}
+
+<div class="row">
+
+    <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Add Startup</h6>
+
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <form method="post" action="{% url 'add_startup' %}" enctype="multipart/form-data" class="row g-3">
+                    {% csrf_token %}
+                    <div class="col-md-12">
+                        <label for="projectname" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="projectname" name="name" required>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <label for="project_details"> Details</label>
+                        <textarea class="form-control" id="project_details" name="about"
+                            rows="3" required></textarea>
+                    </div>
+
+                    <div class="col-md-12 mt-2">
+                        <label for="linkedin_link" class="form-label">Linkedin link</label>
+                        <input type="text" class="form-control" id="linkedin_link" name="linkedin_link" required>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="col-md-12 mt-4 mb-4">
+
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="inputGroupFile02">
+                            <label class="custom-file-label" name="logo" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02" required>Choose Logo</label>
+                        </div>
+                       
+
+                    </div>
+                
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-md btn-block">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+  
+{% endblock container %}

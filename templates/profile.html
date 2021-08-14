@@ -129,6 +129,38 @@
 <br>
 <br>
 
+
+<!-- application notifications start -->
+
+<div class="container mt-4">
+
+  <div class="card border-primary mb-3">
+    <div class="card-header">Application notifications</div>
+    <div style="overflow-y: scroll; max-height:30vh;" class="card-body text-primary">
+
+      {% for i, field in sub_data.items %}
+
+      <a class="notification_link" href="{% url 'project' i.pk %}">
+        <div class="alert alert-success d-flex align-items-center notification_link" role="alert">
+          <svg class="bi flex-shrink-0 me-2" width="30" height="30" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+          <div  style="margin-left: 1rem;">
+           <strong class="d-flex justify-content-between"> {{i.name}}  <span style="margin-left: 1rem;" class="badge bg-dark">Approved</span></strong>  <small style="margin-top: 0.3rem;" class="d-flex justify-content-between">{{field.time|naturaltime}}</small>
+          </div>
+          
+        </div>
+      </a>
+        
+      {% endfor %}
+      
+      
+      
+    </div>
+  </div>
+
+</div>
+
+<!-- application notifications end -->
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-lg-3 col-sm-12 mt-4">

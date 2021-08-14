@@ -28,7 +28,7 @@ class Tags(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
     about = models.TextField()
-    type_of = models.CharField(max_length=3, choices =TYPE, default= 'DEV' )
+    type_of = models.CharField(max_length=3, choices =TYPE, blank=True, null=True)
     image = models.ImageField(upload_to ="dp",default="avatar.png")
     resume = models.FileField(upload_to='resume', blank=True, null = True)
     linkedin_link = models.URLField(blank=True, null=True)
