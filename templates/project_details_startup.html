@@ -143,10 +143,25 @@
 
 {% endif %}
 
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <a type="button" data-toggle="modal" data-target="#editproject" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-edit fa-sm text-white-50"></i> Edit Project</a>
+                {% if project.complete %}
 
+                <h4><span style="padding: 0.7rem;" class="badge badge-pill badge-success"> <i class="fas fa-check-circle"></i> Completed</span></h4>
+                {% else %}
+
+                <a href="{% url 'completed_project' project.pk %}" style="width: 50%;" type="button" class="btn btn-success btn-md  d-sm-inline-block btn-block"><i class="fas fa-check-circle"></i>  Completetion button</a>
+
+                {% endif %}
+
+        <a href="{% url 'delete_project' project.pk %}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fas fa-trash-alt fa-sm text-white-50"></i> Delete Project</a>
+    </div>
+</div>
 <div class="col-lg-12 mt-2 mb-4">
 
-    <!-- Illustrations -->
+
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <div>
@@ -195,6 +210,20 @@
 
                 </div>
             </div>
+            <div class="benefits">
+                <div class="list-group mb-3">
+                    <button type="button" class="list-group-item list-group-item-action active">
+                        Benefits
+                    </button>
+                    {% for j in project.benefit_set.all %}
+                    <button type="button" class="list-group-item list-group-item-action">{{j.name}}</button>
+
+                    {% endfor %}
+
+
+                </div>
+            </div>
+
             <div class="tags mb-3">
                 {% for k in project.tags.all %}
 
@@ -343,7 +372,7 @@
                             data-target="#detailsModal{{i.username}}">Details</button></td>
                     <td>
                         <div class="form-check">
-                            <img src="https://img.icons8.com/color-glass/38/000000/checked-checkbox.png"/>
+                            <img src="https://img.icons8.com/color-glass/38/000000/checked-checkbox.png" />
 
                         </div>
                     </td>
@@ -364,13 +393,13 @@
                         </div>
                     </td>
                 </tr>
-                  
+
                 {% endif %}
-                
 
 
-                <div class="modal fade" id="detailsModal{{i.username}}" tabindex="-1" aria-labelledby="detailsModalLabel{{i.username}}"
-                    aria-hidden="true">
+
+                <div class="modal fade" id="detailsModal{{i.username}}" tabindex="-1"
+                    aria-labelledby="detailsModalLabel{{i.username}}" aria-hidden="true">
                     <div style="max-width: 50vw;"
                         class="modal-dialog modal-dialog-scrollable modal-dialog-centered p-5">
                         <div class="modal-content">
@@ -456,9 +485,55 @@
     </div>
     <div class="card-footer text-muted">
         <button onclick="approval()" type="button" class="btn btn-outline-primary btn-sm btn-block">Approve</button>
-        
+
     </div>
 </div>
+
+
+<!-- edit modal start -->
+
+<div class="modal fade" id="editproject" tabindex="-1" aria-labelledby="editproject" aria-hidden="true">
+    <div style="max-width: 60vw;" class="modal-dialog modal-dialog-scrollable modal-dialog-centered p-5">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editproject">Edit Project Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="card border-primary mb-3">
+
+                    <div class="card-body">
+                        <form enctype="multipart/form-data" method="post" action="{% url 'edit_project' project.pk %}">{% csrf_token %}
+                            <div class="form-group">
+                                <label for="projectname">Name</label>
+                                <input value="{{project.name}}" type="text" class="form-control" name="name" id="projectname">
+                            </div>
+
+                        
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Details</label>
+                                <textarea name="project_details" class="form-control" id="exampleFormControlTextarea1" rows="3">{{project.project_details}}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Requirements</label>
+                                <textarea name="requirements" class="form-control" id="exampleFormControlTextarea1" rows="3">{{project.requirement}}</textarea>
+                            </div>
+
+                            
+
+                            <button type="submit" class="btn btn-primary btn-md btn-block mt-3">Edit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!-- edit modal end -->
 
 {% endblock container %}
 
@@ -502,22 +577,23 @@
 
         console.log('User is Logged In, sending data..');
         var url = '/approval/'
-        project = {{project.pk}}
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify({ 'approves_value': approves_value,'project':project })
+        project = {{ project.pk }
+    }
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({ 'approves_value': approves_value, 'project': project })
+    })
+        .then((resp) => {
+            return resp.json()
         })
-            .then((resp) => {
-                return resp.json()
-            })
-            .then((data) => {
-                console.log(data);
-                window.location.reload();
-            })
+        .then((data) => {
+            console.log(data);
+            window.location.reload();
+        })
 
 
 

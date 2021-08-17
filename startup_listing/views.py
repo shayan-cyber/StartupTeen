@@ -13,11 +13,18 @@ def home(request):
         'communities':communities
     }
 
-    return render(request, 'home.html', context)
+    return render(request, 'index.html', context)
+def communities(request):
+    communities = Community.objects.all()
+    context ={
+        'communities':communities
+    }
+
+    return render(request, 'communities.html', context)
 
 def community(request, id):
     community = get_object_or_404(Community, id = id)
-    projects = Startup_Project.objects.filter(community = community)
+    projects = Startup_Project.objects.filter(community = community, complete=False)
     # images = StartUpImage.objects.filter(start)
     context = {
         'community':community,
@@ -36,29 +43,32 @@ def project(request, id):
     
     
     if request.method == "POST":
-        for i in type_of_fields:
-            project.participants.add(request.user.profile)
-            if i.type_of == "CF":
-                char_in = request.POST.get('char_in','')
-                form_field = Form_Field(char_field =char_in, field_of = i, participant = prof, project_of = project)
-                form_field.save()
-                print("char_in saved")
+        if project.complete == False:
+            for i in type_of_fields:
+                project.participants.add(request.user.profile)
+                if i.type_of == "CF":
+                    char_in = request.POST.get('char_in','')
+                    form_field = Form_Field(char_field =char_in, field_of = i, participant = prof, project_of = project)
+                    form_field.save()
+                    print("char_in saved")
 
-            elif i.type_of == "TF":
-                text_in = request.POST.get('text_in', '')
-                form_field = Form_Field(text_field =text_in, field_of = i, participant = prof, project_of = project)
-                form_field.save()
-                print("text_in saved")
-            elif i.type_of =="FF":
-                img_in = request.FILES['img_in']
-                form_field = Form_Field(file_field =img_in, field_of = i, participant = prof, project_of = project)
-                form_field.save()
-                print("img_in saved")
-            elif i.type_of == "IF":
-                integer_in = request.POST.get('int_in', '')
-                form_field = Form_Field(int_field =integer_in, field_of = i, participant = prof, project_of = project)
-                form_field.save()
-                print("int_in saved")
+                elif i.type_of == "TF":
+                    text_in = request.POST.get('text_in', '')
+                    form_field = Form_Field(text_field =text_in, field_of = i, participant = prof, project_of = project)
+                    form_field.save()
+                    print("text_in saved")
+                elif i.type_of =="FF":
+                    img_in = request.FILES['img_in']
+                    form_field = Form_Field(file_field =img_in, field_of = i, participant = prof, project_of = project)
+                    form_field.save()
+                    print("img_in saved")
+                elif i.type_of == "IF":
+                    integer_in = request.POST.get('int_in', '')
+                    form_field = Form_Field(int_field =integer_in, field_of = i, participant = prof, project_of = project)
+                    form_field.save()
+                    print("int_in saved")
+        else:
+            raise Http404()
     
         
     if prof in get_object_or_404(Startup_Project, id =id).participants.all():
@@ -81,6 +91,7 @@ def profile(request, username):
 
         user_obj = get_object_or_404(User, username =username)
         profile = get_object_or_404(Profile, user = user_obj)
+        completed_projects = Startup_Project.objects.filter(approved_participants= profile, complete = True).order_by('-time')
         skills = Skill.objects.all()
         prof_skills = profile.skill_set.all()
         remaining_skills = skills.difference(prof_skills)
@@ -98,6 +109,7 @@ def profile(request, username):
             'prof_skills':prof_skills,
             'applications': applications,
             'sub_data':sub_data,
+            'completed_projects':completed_projects,
         }
         return render(request, "profile.html", context)
     else:
@@ -211,11 +223,13 @@ def add_project(request):
         communities = Community.objects.all()
         tags_objs = Tags.objects.all()
         skill_objs = Skill.objects.all()
+        benefit_objs = Benefit.objects.all()
         if request.method == "POST":
             name = request.POST.get("name", '')
             project_details = request.POST.get("project_details",'')
             tags = request.POST.getlist('tags', [])
             skills = request.POST.getlist('skills', [])
+            benefits = request.POST.getlist('benefits', [])
             print(tags)
             requirement = request.POST.get("requirement",'')
             community = request.POST.get("community", "")
@@ -237,6 +251,9 @@ def add_project(request):
             for i in skills:
                 skill_obj = get_object_or_404(Skill, id=i)
                 skill_obj.project.add(project_obj)
+            for i in benefits:
+                benefits_obj = get_object_or_404(Benefit, id=i)
+                benefits_obj.project.add(project_obj)
             
             messages.success(request, "Project Added Successfully")
 
@@ -244,7 +261,7 @@ def add_project(request):
             
         else:
             pass
-        context = {'startup':startup, 'communities':communities, 'tags':tags_objs,'skills':skill_objs}
+        context = {'startup':startup, 'communities':communities, 'tags':tags_objs,'skills':skill_objs,'benefits':benefit_objs}
         return render(request, "add_project.html", context)
     else:
         pass
@@ -306,6 +323,8 @@ def add_skills(request):
                 skills_objs = skill.split(",")
             elif ' ' in skill:
                 skills_objs =skill.split(" ")
+            else:
+                skills_objs.append(skill)
             print(skills_objs)
 
             objs = []
@@ -324,19 +343,55 @@ def add_skills(request):
     else:
         pass
 @login_required(login_url='/login_page')
+def add_benefits(request):
+    if request.user.profile.startup:
+        startup= request.user.profile.startup
+        benefits = Benefit.objects.all()
+        temp = []
+        benefits_objs =[]
+        if request.method == 'POST':
+            benefit = request.POST.get('benefit','')
+            benefit = str(benefit)
+            if ',' in benefit:
+
+                benefits_objs = benefit.split(",")
+            else:
+                benefits_objs.append(benefit) 
+            print(benefits_objs)
+
+            objs = []
+            for i in benefits:
+                objs.append(i.name)
+            
+            for i in benefits_objs:
+                if i in objs:
+                    print("already exists")
+                    temp.append(get_object_or_404(Benefit, name=i))
+                else:
+                    benefitobj = Benefit(name=i)
+                    benefitobj.save()
+            benefits = Benefit.objects.all()
+        return render(request, "add_benefits.html", {"benefits":benefits, 'startup':startup, 'temp':temp})
+    else:
+        pass
+@login_required(login_url='/login_page')
 def add_tags(request):
     if request.user.profile.startup:
         temp =[]
         tags_objs =[]
         startup= request.user.profile.startup
         tags = Tags.objects.all()
+        print(request.method)
         if request.method == 'POST':
             tag = request.POST.get('tag','')
             tag = str(tag)
+            print(tag)
             if ',' in tag:
                 tags_objs = tag.split(',')
             elif ' ' in tag:
                 tags_objs = tag.split(' ')
+            else:
+                tags_objs.append(tag)
             print(tags_objs)
             objs =[]
 
@@ -533,4 +588,76 @@ def startup_dashboard(request):
     else:
         #dont have startup
         raise Http404()
+    
 
+@login_required(login_url='/login_page')
+def edit_startup(request, pk):
+    startup = get_object_or_404(StartUp, pk =pk)
+    startup_logos = StartUpImage.objects.filter(start_up = startup)[0]
+    if startup.owner.user == request.user:
+        if request.method == 'POST':
+            name = request.POST.get('name','')
+            about = request.POST.get('about','')
+            linkedin_link = request.POST.get('linkedin_url','')
+            logo = request.FILES.get('logo', '')
+            email = request.POST.get('email','')
+            if logo:
+                logo = logo
+            else:
+                logo = startup_logos.image
+            startup.name = name
+            startup.about = about
+            startup.linkedin_link = linkedin_link
+            startup.email = email
+            print(logo)
+            print(startup_logos.image)
+            startup_logos.image = logo
+
+            startup_logos.save()
+            print(startup_logos.image)
+            startup.save()
+
+            return redirect('/startup_dashboard')
+    else:
+        raise Http404()
+
+
+def edit_project(request, pk):
+    project = get_object_or_404(Startup_Project,pk=pk)
+    if project.startup.owner.user == request.user:
+        if request.method == 'POST':
+            name = request.POST.get('name','')
+            details = request.POST.get('project_details','')
+            requirements = request.POST.get('requirements','')
+            project.name = name
+            project.project_details = details
+            project.requirement = requirements
+            project.save()
+
+            return redirect('/project_details_startup/' + str(pk))
+        else:
+            raise Http404()
+
+
+def delete_project(request,pk):
+    project = get_object_or_404(Startup_Project,pk=pk)
+    if project.startup.owner.user == request.user:
+        project.delete()
+
+        return redirect('/startup_dashboard')
+
+
+    else:
+        raise Http404()
+
+def completed_project(request,pk):
+    project = get_object_or_404(Startup_Project,pk=pk)
+    if project.startup.owner.user == request.user:
+        project.complete = True
+        project.save()
+
+        return redirect('/project_details_startup/' + str(pk))
+
+
+    else:
+        raise Http404()

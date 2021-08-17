@@ -89,6 +89,7 @@ class Startup_Project(models.Model):
     requirement = models.TextField(default="")
     community = models.ForeignKey(Community, on_delete= models.CASCADE, null= True, blank=True)
     complete = models.BooleanField(default=False)
+    # hired_dev = models.ManyToManyField(Profile, related_name="hired_dev", blank=True, null=True)
     def __str__(self):
         return self.name
 
@@ -103,10 +104,10 @@ class Skill(models.Model):
 
 class Benefit(models.Model):
     name = models.CharField(max_length=100)
-    project = models.ForeignKey(Startup_Project, on_delete= models.CASCADE)
+    project = models.ManyToManyField(Startup_Project)
 
     def __str__(self):
-        return self.name + " from " + self.project.name
+        return self.name 
 
 
 

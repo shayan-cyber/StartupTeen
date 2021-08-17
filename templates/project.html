@@ -14,10 +14,10 @@
                 <div class="container-fluid pt-1 pb-2">
                     <h3 style="font-size: 2.3rem;" class="display-5 fw-bold">{{project.name}}</h3>
                     <br>
-                    
 
-                    <a href="mailto:{{project.startup.email}}"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
-                            class="bi bi-envelope-fill" viewBox="0 0 16 16">
+
+                    <a href="mailto:{{project.startup.email}}"><svg xmlns="http://www.w3.org/2000/svg" width="36"
+                            height="36" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
                             <path
                                 d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z" />
                         </svg></a>
@@ -33,15 +33,22 @@
 
                     <br>
                     <br>
+                    {% if project.complete %}
+                
+                    <h1>Already <span class="badge badge-secondary">Completed</span></h1>
+                    {% else %}
+                      
+                    
                     {% if registered %}
                     <div class="alert alert-success" role="alert">
-                       You Have Already Applied <a href="#" class="alert-link">Go to Profile</a> To Check status
+                        You Have Already Applied <a href="{% url 'profile' request.user.username %}" class="alert-link">Go to Profile</a> To Check status
                     </div>
                     {% else %}
-                    <button style="border-radius: 2rem; width: 10rem; " class="btn btn-dark btn-lg apply-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Apply</button>
+                    <button style="border-radius: 2rem; width: 10rem; " class="btn btn-dark btn-lg apply-button"
+                        data-bs-toggle="modal" data-bs-target="#exampleModal">Apply</button>
 
                     {% endif %}
-                    
+                    {% endif %}
                 </div>
 
             </div>
@@ -51,81 +58,97 @@
 </div>
 
 <div class="container mt-5">
-    <strong><h2>Project Details</h2></strong>
+    <strong>
+        <h2 style="font-size: 1.5rem;">Project Details</h2>
+    </strong>
+    <br>
+
+
+    <p style="font-size: 1.3rem;">
+        {{project.project_details}}
+    </p>
     <br>
 
     
-        <p style="font-size: 1.3rem;">
-            {{project.project_details}}
-        </p>
+
+        <strong>
+            <h4 style="font-size: 1.5rem;">Startup Details</h4>
+        </strong>
         <br>
-        <strong><h2>Company Details</h2></strong>
-        <br>
-        <div class="card border-info mb-3" >
+        <div class="card border-info mb-3">
             <div class="card-header">
-                <h4><a href="{% url 'startup_home' project.startup.id %}">{{project.startup.name}}</a></h4>
+                <h4 style="font-size: 1.5rem;"><a href="{% url 'startup_home' project.startup.id %}">{{project.startup.name}}</a></h4>
             </div>
             <div class="card-body">
-              <h5 class="card-title">{{project.startup.owner.user.username}}<small style="font-size: small;font-weight: normal;"> (Owner)</small></h5>
-              <p class="card-text">{{project.startup.about|truncatechars:300}}</p>
-              <div class="d-grid gap-2">
-                <a href="{% url 'startup_home' project.startup.pk %}" class="btn btn-primary" >Know More</a>
-               
-              </div>
+                <h5 style="font-size: large;" class="card-title">{{project.startup.owner.user.username}}<small
+                        style="font-size: small;font-weight: normal;"> (Owner)</small></h5>
+                <p class="card-text">{{project.startup.about|truncatechars:300}}</p>
+                <div class="d-grid gap-2 mt-2">
+                    <a href="{% url 'startup_home' project.startup.pk %}" class="btn btn-primary">Know More</a>
+    
+                </div>
             </div>
-          </div>
-        
+        </div>
+
+  
     
-        
-            
-    
+
+
+
+
+
 </div>
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-lg-4 col-sm-12 mt-3">
-            <strong><h2>Benefits</h2></strong>
-            <div class="container mt-5">
-                <ul>
-                    {% for i in project.benefit_set.all %}
-                    <li>
-                       <h5> {{i.name}}</h5>
+<div style="background-color:#f9f9f9;" class="container mt-5 px-3 py-3">
+    
 
-                    </li>
-                      
-                    {% endfor %}
-                    
-                </ul>
+
+
+    <div class="list-group mt-5">
+        <button type="button" class="list-group-item list-group-item-action active">
+            Required Skills
+        </button>
+        <div style="padding-left: 0.95rem;
+        padding-right: 0.95rem;" class="row">
+
+            {% for skill in project.skill_set.all %}
+
+            <div class="col px-0">
+                <button type="button" class="list-group-item list-group-item-action">{{skill.name}}</button>
             </div>
 
-        </div>
-        <div class="col-lg-4">
+            {% endfor %}
 
         </div>
 
-        <div class="col-lg-4 col-sm-12 mt-3">
-            <strong><h2>SKills</h2></strong>
-            <div class="container mt-5">
-                <ul>
-                    {% for i in project.skill_set.all %}
-                    <li>
-                       <h5> {{i.name}}</h5>
+    </div>
 
-                    </li>
-                      
-                    {% endfor %}
-                    
-                </ul>
+    <div class="list-group mt-5">
+        <button type="button" class="list-group-item list-group-item-action active">
+            Benefits
+        </button>
+        <div style="padding-left: 0.95rem;
+        padding-right: 0.95rem;" class="row">
+
+            {% for i in project.benefit_set.all %}
+
+            <div class="col px-0">
+                <button type="button" class="list-group-item list-group-item-action">{{i.name}}</button>
             </div>
 
+            {% endfor %}
+
         </div>
+
     </div>
 </div>
 
 <div class="container mt-4">
     <div class="box-shadow p-5">
 
-        <strong><h4>Requirements</h4></strong>
+        <strong>
+            <h4 style="font-size: 1.5rem;">Requirements</h4>
+        </strong>
 
         <br>
         <p style="font-size: 1.1rem;">{{project.requirement}}</p>
@@ -137,63 +160,67 @@
 <!-- form apply start -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div style="max-width: 60vw;" class="modal-dialog  required">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Application</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            {% if set_fields %}
-            <form action="{% url 'project' project.id %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
-    
-                <div class="form-layout card-body">
-                    {% for field in set_fields  %}
-                    <label for="exampleInputEmail1" class="form-label" >{{field.label}}</label>
-                    
-                    {% if field.type_of == 'CF' %}
-                    <div class="mb-3">
-                      
-                        <input type="text" name="char_in" class="form-control form_field" id="exampleInputEmail1" aria-describedby="emailHelp" required>
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                    </div>
-                    {% elif field.type_of == 'TF' %}
-                    <div class="mb-3">
-                       
-                        <textarea name="text_in" class="form-control form_field" id="exampleFormControlTextarea1" rows="3" required></textarea>
-                    </div>
-            
-                    {% elif field.type_of == 'FF' %}
-                    <div class="mb-3">
-            
-                        <input name="img_in" class="form-control form-control-sm " id="formFileSm" type="file" required>
-                    </div>
-            
-                    {% elif field.type_of == 'IF' %}
-                    <div class="mb-3">
-            
-                        <input name="int_in" type="number" class="form-control form_field" id="exampleInputEmail1" aria-describedby="emailHelp" required>
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                    </div>
-                    {% endif %}
-                        
-                        
-                    {% endfor %}
-                        
-                </div>
-               
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Application</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% if set_fields %}
+                <form action="{% url 'project' project.id %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
 
-                <div class="d-grid gap-2 ">
-                    <button class="btn btn-primary" type="submit">Submit</button>
-                  
-                </div>
-                
-            </form>
-            {% endif %}
+                    <div class="form-layout card-body">
+                        {% for field in set_fields %}
+                        <label for="exampleInputEmail1" class="form-label">{{field.label}}</label>
+
+                        {% if field.type_of == 'CF' %}
+                        <div class="mb-3">
+
+                            <input type="text" name="char_in" class="form-control form_field" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" required>
+                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        </div>
+                        {% elif field.type_of == 'TF' %}
+                        <div class="mb-3">
+
+                            <textarea name="text_in" class="form-control form_field" id="exampleFormControlTextarea1"
+                                rows="3" required></textarea>
+                        </div>
+
+                        {% elif field.type_of == 'FF' %}
+                        <div class="mb-3">
+
+                            <input name="img_in" class="form-control form-control-sm " id="formFileSm" type="file"
+                                required>
+                        </div>
+
+                        {% elif field.type_of == 'IF' %}
+                        <div class="mb-3">
+
+                            <input name="int_in" type="number" class="form-control form_field" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" required>
+                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        </div>
+                        {% endif %}
+
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <div class="d-grid gap-2 ">
+                        <button class="btn btn-primary" type="submit">Submit</button>
+
+                    </div>
+
+                </form>
+                {% endif %}
+            </div>
+
         </div>
-       
-      </div>
     </div>
-  </div>
+</div>
 
 
 

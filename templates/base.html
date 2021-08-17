@@ -1,3 +1,4 @@
+{% load static %}
 {% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
@@ -18,6 +19,17 @@
       integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
       crossorigin="anonymous"
     />
+<!-- from landing page -->
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/LineIcons.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/owl.theme.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/nivo-lightbox.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/main.css' %}">    
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/responsive.css' %}">
+    <!-- end -->
   </head>
   <style>
     body {
@@ -67,6 +79,9 @@
       background-color: #00d69f !important;
 
     }
+    .visit-btn:hover{
+    background-color:#007bff
+  }
   </style>
   <body>
 
@@ -85,74 +100,51 @@
     </svg>
 
   <!-- svg load end -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Dropdown
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link disabled"
-                href="#"
-                tabindex="-1"
-                aria-disabled="true"
-                >Disabled</a
-              >
-            </li>
-          </ul>
-          <form class="d-flex">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
+    <nav style=" background: linear-gradient(95deg, #5533ff 40%, #25ddf5 100%);" class="navbar navbar-expand-md  fixed-top scrolling-navbar">
+        <div class="container">
+          <a href="index.html" class="navbar-brand"><img src="{% static 'landing_page_assets/img/logo.png' %}" alt=""></a>       
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="lni-menu"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto w-100 justify-content-end">
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#home">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#services">About</a>
+              </li>  
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#features">Services</a>
+              </li>                            
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#showcase">Showcase</a>
+              </li>       
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#pricing">Pricing</a>
+              </li>     
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#team">Team</a>
+              </li> 
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#blog">Blog</a>
+              </li>  
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#contact">Contact</a>
+              </li> 
+              <li class="nav-item">
+                <a class="btn btn-singin" href="#">Download</a>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav> 
+      <br><br><br><br>
 
-    <div class="container">{% block container %} {% endblock container %}</div>
+    <div class="container mt-5">{% block container %} {% endblock container %}</div>
+    {% block section %}
+      
+    {% endblock section %}
 
     <br />
     <br />
