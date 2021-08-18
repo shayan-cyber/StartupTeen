@@ -44,11 +44,23 @@
                         You Have Already Applied <a href="{% url 'profile' request.user.username %}" class="alert-link">Go to Profile</a> To Check status
                     </div>
                     {% else %}
+                    {% if request.user.profile.type_of == "DEV" %}
+
                     <button style="border-radius: 2rem; width: 10rem; " class="btn btn-dark btn-lg apply-button"
                         data-bs-toggle="modal" data-bs-target="#exampleModal">Apply</button>
+                      
+                    {% endif %}
+                    
 
                     {% endif %}
                     {% endif %}
+
+                    <br>
+                    {% for j in project.tags.all %}
+                    <a style="text-decoration: none; padding-right: 0.5rem; padding-left: 0.5rem; color: #0d6efd; font-weight: bold; padding-top:1rem" href="{% url 'tag_link' j.pk %}">
+                      #{{j.name}}</a>
+  
+                    {% endfor %}
                 </div>
 
             </div>

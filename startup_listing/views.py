@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, Http404, redirect
+from django.shortcuts import render, get_object_or_404, Http404, redirect, HttpResponse
 from . models import *
 from django.contrib import messages
 import json
@@ -9,26 +9,40 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
     communities = Community.objects.all()
+    past_projects = Startup_Project.objects.filter(complete=True)
     context ={
-        'communities':communities
+        'communities':communities,
+        'past_projects':past_projects,
     }
 
     return render(request, 'index.html', context)
 def communities(request):
-    communities = Community.objects.all()
-    context ={
-        'communities':communities
-    }
+    if request.method == 'POST':
+        community_text = request.POST.get('community', '')
+        search_results = Community.objects.filter(name__icontains = community_text)
+        context ={
+            'search_results':search_results,
+        }
+        return render(request, 'communities.html', context)
+    else:
 
-    return render(request, 'communities.html', context)
+        communities = Community.objects.all()
+        context ={
+            'communities':communities
+        }
+
+        return render(request, 'communities.html', context)
 
 def community(request, id):
     community = get_object_or_404(Community, id = id)
     projects = Startup_Project.objects.filter(community = community, complete=False)
+    past_projects = Startup_Project.objects.filter(community = community, complete=True)
+    
     # images = StartUpImage.objects.filter(start)
     context = {
         'community':community,
         'projects':projects,
+        'past_projects':past_projects,
 
     }
     return render(request, 'community.html', context)
@@ -112,8 +126,16 @@ def profile(request, username):
             'completed_projects':completed_projects,
         }
         return render(request, "profile.html", context)
-    else:
-        raise Http404()
+    elif request.user.profile.type_of =="OWN":
+        user_obj = get_object_or_404(User, username =username)
+        profile = get_object_or_404(Profile, user = user_obj)
+        startup = StartUp.objects.filter(owner=profile)
+        context ={
+            'profile':profile,
+            'startup':startup
+
+        }
+        return render(request, "profile_owner.html", context)
 
 
 
@@ -140,7 +162,7 @@ def profile_edit(request, username):
                 prof.linkedin_link = linkedin_link
                 prof.github_link = github_link
                 prof.email = email
-                prof.phone = phone
+                # prof.phone = phone
                 prof.work_experience = work_experience
 
             elif not dp and resume:
@@ -151,7 +173,7 @@ def profile_edit(request, username):
                 prof.linkedin_link = linkedin_link
                 prof.github_link = github_link
                 prof.email = email
-                prof.phone = phone
+                # prof.phone = phone
                 prof.work_experience = work_experience
             elif not resume and dp:
                 prof = get_object_or_404(Profile, user = user_obj)
@@ -161,7 +183,7 @@ def profile_edit(request, username):
                 prof.linkedin_link = linkedin_link
                 prof.github_link = github_link
                 prof.email = email
-                prof.phone = phone
+                # prof.phone = phone
                 prof.work_experience = work_experience
             elif not resume and not dp:
                 prof = get_object_or_404(Profile, user = user_obj)
@@ -171,7 +193,7 @@ def profile_edit(request, username):
                 prof.linkedin_link = linkedin_link
                 prof.github_link = github_link
                 prof.email = email
-                prof.phone = phone
+                # prof.phone = phone
                 prof.work_experience = work_experience
             prof.skill_set.clear()
             for i in skills:
@@ -184,10 +206,37 @@ def profile_edit(request, username):
             else:
                 prof.open_to_work = False
             print(open_to_work)
+
+            if phone != 'None':
+                prof.phone = phone
             prof.save()
             sk.save()
 
             return redirect('/profile/' + str(username))
+        elif user_obj.profile.type_of =="OWN":
+            dp = request.FILES.get('dp')
+            github_link = request.POST.get("github_link", "")
+            linkedin_link = request.POST.get("linkedin_link", "")
+            email = request.POST.get("email", "")
+            phone = request.POST.get("phone", "")
+            about = request.POST.get("about", "")
+            prof = get_object_or_404(Profile, user = user_obj)
+            prof.linkedin_link = linkedin_link
+            prof.github_link = github_link
+            prof.email = email
+            # prof.phone = phone
+            prof.about = about
+            if dp:
+                
+                prof.image = dp
+            if phone != 'None':
+                prof.phone = phone
+                
+            prof.save()
+            return redirect('/profile/' + str(username))
+
+
+
             
         else:
             pass
@@ -576,7 +625,8 @@ def add_startup(request):
         raise Http404()
 @login_required(login_url='/login_page')
 def startup_dashboard(request):
-    startup = get_object_or_404(StartUp, owner = request.user.profile)
+    # startup = get_object_or_404(StartUp, owner = request.user.profile)
+    startup = StartUp.objects.filter(owner=request.user.profile)
     if startup:
         startup = request.user.profile.startup
         projects = Startup_Project.objects.filter(startup=startup)
@@ -587,7 +637,7 @@ def startup_dashboard(request):
         return render(request, 'startup_dashboard.html',context)
     else:
         #dont have startup
-        raise Http404()
+        return redirect('/add_startup')
     
 
 @login_required(login_url='/login_page')
@@ -621,7 +671,7 @@ def edit_startup(request, pk):
     else:
         raise Http404()
 
-
+@login_required(login_url='/login_page')
 def edit_project(request, pk):
     project = get_object_or_404(Startup_Project,pk=pk)
     if project.startup.owner.user == request.user:
@@ -638,7 +688,7 @@ def edit_project(request, pk):
         else:
             raise Http404()
 
-
+@login_required(login_url='/login_page')
 def delete_project(request,pk):
     project = get_object_or_404(Startup_Project,pk=pk)
     if project.startup.owner.user == request.user:
@@ -649,7 +699,7 @@ def delete_project(request,pk):
 
     else:
         raise Http404()
-
+@login_required(login_url='/login_page')
 def completed_project(request,pk):
     project = get_object_or_404(Startup_Project,pk=pk)
     if project.startup.owner.user == request.user:
@@ -661,3 +711,45 @@ def completed_project(request,pk):
 
     else:
         raise Http404()
+
+def tag_link(request, pk):
+    projects = Startup_Project.objects.filter(tags = get_object_or_404(Tags, pk =pk), complete=False)
+    past_projects = Startup_Project.objects.filter(tags = get_object_or_404(Tags, pk =pk), complete=True)
+    context ={
+        'projects':projects,
+        'past_projects':past_projects,
+        'tag':get_object_or_404(Tags, pk=pk)
+    }
+    return render(request, 'tag_link.html', context)
+
+@login_required(login_url='/login_page')
+def explore_section(request):
+    skills = Skill.objects.filter(profile = request.user.profile)
+    print(skills)
+    project_list =[]
+    past_project_list = []
+    for skill in skills:
+        for proj in skill.project.all():
+            # if proj in project_list and proj in past_project_list:
+            #     print("already in")
+            #     continue
+            if proj not in past_project_list and proj not in project_list:
+                if proj.complete ==False :
+                    project_list.append(proj)
+                elif proj.complete ==True :
+                    past_project_list.append(proj)
+            
+        
+
+    # projects = Startup_Project.objects.filter()
+    print(past_project_list)
+    print(project_list)
+    context = {'projects':project_list, 'past_projects':past_project_list}
+    return render(request, 'explore_section.html', context)
+
+
+
+
+def log_out(request):
+    logout(request)
+    return redirect("/")

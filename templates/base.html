@@ -108,24 +108,28 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto w-100 justify-content-end">
-              <li class="nav-item">
-                <a class="nav-link page-scroll" href="#home">Home</a>
+              <li class="nav-item active">
+                <a class="nav-link page-scroll " href="/">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#services">About</a>
+                <a class="nav-link page-scroll" href="{% url 'communities' %}">Communities</a>
               </li>  
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#features">Services</a>
-              </li>                            
+                <a class="nav-link page-scroll" href="{% url 'explore_section' %}">Explore</a>
+              </li>
+              {% if request.user.profile.typ_of == "OWN" %}
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#showcase">Showcase</a>
-              </li>       
-              <li class="nav-item">
+                <a class="nav-link page-scroll" href="{% url 'startup_dashboard' %}">Dashboard</a>
+              </li>
+                
+              {% endif %}                            
+                    
+              <!-- <li class="nav-item">
                 <a class="nav-link page-scroll" href="#pricing">Pricing</a>
               </li>     
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="#team">Team</a>
-              </li> 
+              </li>  -->
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="#blog">Blog</a>
               </li>  
@@ -133,8 +137,29 @@
                 <a class="nav-link page-scroll" href="#contact">Contact</a>
               </li> 
               <li class="nav-item">
-                <a class="btn btn-singin" href="#">Download</a>
+                {% if request.user.is_authenticated %}
+
+                <a class="btn btn-singin" href="{% url 'log_out' %}">Log Out</a>
+                  {% else %}
+                
+                <a class="btn btn-singin" href="{% url 'login_page' %}">Sign In</a>
+                {% endif %}
               </li>
+              {% if request.user.is_authenticated %}
+
+              <li class="nav-item">
+                <a href="{% url 'profile' request.user.username %}" class="nav-link">{{request.user.username}}</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'profile' request.user.username %}">
+
+                  <img style="width:3rem; height:3rem; margin-left:1rem; margin-top:-0.3rem" class="rounded-circle" src="{{request.user.profile.image.url}}" alt="">
+
+                </a>
+                
+              </li>
+                
+              {% endif %}
             </ul>
           </div>
         </div>
@@ -145,6 +170,12 @@
     {% block section %}
       
     {% endblock section %}
+
+    <br>
+
+    {% block section_second %}
+      
+    {% endblock section_second %}
 
     <br />
     <br />
@@ -218,4 +249,8 @@
     integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
     crossorigin="anonymous"
   ></script>
+
+  {% block js %}
+    
+  {% endblock js %}
 </html>

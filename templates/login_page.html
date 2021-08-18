@@ -7,6 +7,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+    <!-- from landing page -->
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/LineIcons.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/owl.theme.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/nivo-lightbox.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/main.css' %}">    
+    <link rel="stylesheet" href="{% static 'landing_page_assets/css/responsive.css' %}">
+    <!-- end -->
 
     <link rel="stylesheet" href="{% static 'login_page_assets/fonts/icomoon/style.css' %}">
 
@@ -27,6 +38,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <title>Login StartupTeen</title>
+
+    
   </head>
 
   <style>
@@ -36,44 +49,74 @@
     body {
       font-family: "Varela", sans-serif;
     }
+    .btn-singin{
+      background: #7fc9fb;
+    color: #fff;
+    padding: 10px 23px;
+    margin-left: 30px;
+    box-shadow:0px 8px 9px 0px rgb(96 94 94 / 17%);
+    }
   </style>
   <body>
   
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Navbar</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-          </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+    <nav style=" background: linear-gradient(95deg, #5533ff 40%, #25ddf5 100%);" class="navbar navbar-expand-md  fixed-top scrolling-navbar">
+      <div class="container">
+        <a href="index.html" class="navbar-brand"><img src="{% static 'landing_page_assets/img/logo.png' %}" alt=""></a>       
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="lni-menu"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav mr-auto w-100 justify-content-end">
+            <li class="nav-item">
+              <a class="nav-link page-scroll" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link page-scroll" href="#services">About</a>
+            </li>  
+            <li class="nav-item">
+              <a class="nav-link page-scroll" href="#features">Services</a>
+            </li>                            
+                
+            <li class="nav-item">
+              <a class="nav-link page-scroll" href="#team">Team</a>
+            </li> 
+            <li class="nav-item">
+              <a class="nav-link page-scroll" href="#blog">Blog</a>
+            </li>  
+            <li class="nav-item">
+              <a class="nav-link page-scroll" href="#contact">Contact</a>
+            </li> 
+            
+            <li class="nav-item">
+              {% if request.user.is_authenticated %}
+
+              <a class="btn btn-singin" href="{% url 'log_out' %}">Log Out</a>
+                {% else %}
+              
+              <a class="btn btn-singin" href="{% url 'login_page' %}">Sign In</a>
+              {% endif %}
+            </li>
+            {% if request.user.is_authenticated %}
+
+            <li class="nav-item">
+              <a href="{% url 'profile' request.user.username %}" class="nav-link">{{request.user.username}}</a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'profile' request.user.username %}">
+
+                <img style="width:3rem; height:3rem; margin-left:1rem; margin-top:-0.3rem" class="rounded-circle" src="{{request.user.profile.image.url}}" alt="">
+
+              </a>
+              
+            </li>
+              
+            {% endif %}
+            
+          </ul>
+        </div>
       </div>
-    </nav>
+    </nav> 
+    <br><br><br><br>
   
   <div class="content">
     <div class="container">

@@ -26,5 +26,8 @@ urlpatterns = [
     path('edit_startup/<int:pk>', views.edit_startup, name="edit_startup"),
     path('edit_project/<int:pk>', views.edit_project, name="edit_project"),
     path('delete_project/<int:pk>', views.delete_project, name="delete_project"),
-    path('completed_project/<int:pk>', views.completed_project, name="completed_project")
+    path('completed_project/<int:pk>', views.completed_project, name="completed_project"),
+    path('tag_link/<int:pk>', views.tag_link, name="tag_link"),
+    path('explore_section', views.explore_section, name="explore_section"),
+    path('log_out', views.log_out, name="log_out")
 ]

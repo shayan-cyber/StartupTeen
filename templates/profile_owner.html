@@ -5,16 +5,9 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
   integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
 <style>
-  a {
+   a {
     text-decoration: none;
   }
-  .btn-singin{
-      background: #7fc9fb;
-    color: #fff;
-    padding: 10px 23px;
-    margin-left: 30px;
-    box-shadow:0px 8px 9px 0px rgb(96 94 94 / 17%);
-    }
 </style>
 
 <div class="container mt-5">
@@ -31,48 +24,24 @@
           <br>
 
           <h5 class="mb-3">
-            {% if profile.open_to_work %}
+           
 
-            <span class="badge rounded-pill bg-info text-dark mt-3">Open To Work
-              <svg style="margin-bottom: 0.1rem;" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                fill="currentColor" class="bi bi-check2-all" viewBox="0 0 16 16">
-                <path
-                  d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
-                <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
-              </svg>
+            <span class="badge rounded-pill bg-info text-dark mt-3">Startup Owner
+                <img src="https://img.icons8.com/ios-glyphs/30/000000/rocket.png"/>
             </span>
-            {% else %}
-
-            <span class="badge rounded-pill bg-danger text-white mt-3">Not Open To Work</span>
-
-            {% endif %}
+          
 
 
           </h5>
 
           <!-- skills -->
 
-          {% for i in profile.skill_set.all|slice:":5" %}
-
-          <span class="badge rounded-pill bg-dark ">{{i.name}}</span>
-
-          {% endfor %}
+         
 
 
 
           <br>
-          {% if profile.resume %}
-          <a class="btn btn-outline-primary mt-3" href="{{profile.resume}}" download="">Resume
-            <svg style="margin-bottom: 0.1rem;" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-              fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-              <path
-                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-              <path
-                d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-            </svg>
-          </a>
-
-          {% endif %}
+          
 
 
         </div>
@@ -111,7 +80,7 @@
 
     </div>
     {% endif %}
-    <h5><strong><span class="badge bg-secondary">{{profile.work_experience}} Years Experience</span></strong></h5>
+    
     <p class="mt-2">{{profile.about}}</p>
     <a style="font-weight: bold;" class="contact_link" data-bs-toggle="collapse" href="#contactinfo" role="button"
       aria-expanded="false" aria-controls="contactinfo">
@@ -176,88 +145,39 @@
 <br>
 
 
-{% if request.user == profile.user %}
-  
 
 
-<!-- application notifications start -->
 
-<div class="container mt-4">
 
-  <div class="card border-primary mb-3">
-    <div class="card-header">Application notifications</div>
-    <div style="overflow-y: scroll; max-height:30vh;" class="card-body text-primary">
+{% if startup %}
+<strong>
+    <h4 style="font-size: 1.5rem;">Startup Details</h4>
+</strong>
+<br>
+<div class="card border-info mb-3">
+    <div class="card-header">
+        <h4 style="font-size: 1.5rem;"><a href="{% url 'startup_home' startup.0.id %}">{{startup.0.name}}</a></h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-4">
+                <img style="width:10rem; height: 10rem" class="rounded-circle" src="{{startup.0.startupimage_set.all.0.image.url}}" alt="">
+            </div>
+            <div class="col-8 ">
+                <p class="card-text mt-3">{{startup.0.about|truncatechars:500}}</p>
 
-      {% for i, field in sub_data.items %}
-
-      <a class="notification_link" href="{% url 'project' i.pk %}">
-        <div class="alert alert-success d-flex align-items-center notification_link" role="alert">
-          <svg class="bi flex-shrink-0 me-2" width="30" height="30" role="img" aria-label="Success:">
-            <use xlink:href="#check-circle-fill" />
-          </svg>
-          <div style="margin-left: 1rem;">
-            <strong class="d-flex justify-content-between"> {{i.name}} <span style="margin-left: 1rem;"
-                class="badge bg-dark">Approved</span></strong> <small style="margin-top: 0.3rem;"
-              class="d-flex justify-content-between">{{field.time|naturaltime}}</small>
-          </div>
+            </div>
+        </div>
+       
+        
+        <div class="d-grid gap-2 mt-2">
+            <a href="{% url 'startup_home' startup.0.pk %}" class="btn btn-primary">Know More</a>
 
         </div>
-      </a>
-
-      {% endfor %}
-
-
-
     </div>
-  </div>
-
-</div>
-
-<!-- application notifications end -->
-{% endif %}
-
-
-
-{% comment %}
-<div class="container mt-4">
-  <div class="row">
-    <div class="col-lg-3 col-sm-12 mt-4">
-      <div class="box-shadow p-5">
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum delectus cumque et iste tempore impedit est
-          ducimus maiores harum quasi iusto unde nam, voluptates commodi distinctio, eligendi soluta accusantium
-          praesentium?</p>
-
-      </div>
-    </div>
-    <div class="col-lg-3 col-sm-12 mt-4">
-      <div class="box-shadow p-5">
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum delectus cumque et iste tempore impedit est
-          ducimus maiores harum quasi iusto unde nam, voluptates commodi distinctio, eligendi soluta accusantium
-          praesentium?</p>
-
-      </div>
-    </div>
-    <div class="col-lg-3 col-sm-12 mt-4">
-      <div class="box-shadow p-5">
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum delectus cumque et iste tempore impedit est
-          ducimus maiores harum quasi iusto unde nam, voluptates commodi distinctio, eligendi soluta accusantium
-          praesentium?</p>
-
-      </div>
-    </div>
-    <div class="col-lg-3 col-sm-12 mt-4">
-      <div class="box-shadow p-5">
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum delectus cumque et iste tempore impedit est
-          ducimus maiores harum quasi iusto unde nam, voluptates commodi distinctio, eligendi soluta accusantium
-          praesentium?</p>
-
-      </div>
-    </div>
-  </div>
 </div>
   
-{% endcomment %}
-
+{% endif %}
 
 
 
@@ -282,45 +202,15 @@
 
 
 
-          <div class="mb-3">
 
-            <div class="form-check form-switch">
-              <input name="open_to_work" class="form-check-input" type="checkbox" id="open_to_work" checked>
-              <label class="form-check-label" name="open_to_work" for="open_to_work">Open To Work</label>
-            </div>
-          </div>
+        
 
-          <div class="mb-3 mt-4">
-            <label class="form-label" for="skill">Skills</label>
-            <select id="skill" name="skills" multiple class="form-select form-select-sm"
-              aria-label=".form-select-sm example">
-
-              {% for skill in prof_skills %}
-
-              <option selected value="{{skill.pk}}">{{skill.name}}</option>
-
-              {% endfor %}
-              {% for skill in remaining_skills %}
-              <option value="{{skill.pk}}">{{skill.name}}</option>
-
-              {% endfor %}
-
-
-
-            </select>
-            <div id="skill" class="form-text">Select Best Five</div>
-          </div>
-
-          <div class="mb-3 mt-5">
+          <div class="mb-3 mt-2">
             <label for="dp" class="form-label">Display Picture</label>
             <input name="dp" class="form-control" type="file" id="dp">
 
           </div>
-          <div class="mb-3 mt-5">
-            <label for="resume" class="form-label">Your Resume</label>
-            <input name="resume" class="form-control" type="file" id="resume">
-
-          </div>
+          
 
           <div class="mb-3  mt-5">
             <label for="github_link" class="form-label">
@@ -373,24 +263,7 @@
             <input type="tel" value="{{profile.phone}}" class="form-control form_field" name="phone" id="phone"
               placeholder="Enter Your Phone No.">
           </div>
-          <div class="mb-3 mt-5">
-
-            <label for="experience" class="form-label">
-              <svg style="margin-bottom: 0.1rem;" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                fill="currentColor" class="bi bi-server" viewBox="0 0 16 16">
-                <path
-                  d="M1.333 2.667C1.333 1.194 4.318 0 8 0s6.667 1.194 6.667 2.667V4c0 1.473-2.985 2.667-6.667 2.667S1.333 5.473 1.333 4V2.667z" />
-                <path
-                  d="M1.333 6.334v3C1.333 10.805 4.318 12 8 12s6.667-1.194 6.667-2.667V6.334a6.51 6.51 0 0 1-1.458.79C11.81 7.684 9.967 8 8 8c-1.966 0-3.809-.317-5.208-.876a6.508 6.508 0 0 1-1.458-.79z" />
-                <path
-                  d="M14.667 11.668a6.51 6.51 0 0 1-1.458.789c-1.4.56-3.242.876-5.21.876-1.966 0-3.809-.316-5.208-.876a6.51 6.51 0 0 1-1.458-.79v1.666C1.333 14.806 4.318 16 8 16s6.667-1.194 6.667-2.667v-1.665z" />
-              </svg>
-              Work Experience
-            </label>
-            <input type="number" value="{{profile.work_experience}}" name="work_experience"
-              class="form-control form_field" id="experience">
-
-          </div>
+        
 
 
 
@@ -427,67 +300,6 @@
 
 
 
-<!-- done projects start-->
- <!-- Blog Section -->
- <section id="blog" class="section">
-  <!-- Container Starts -->
-  <div class="container">
-    <!-- Start Row -->
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="blog-text section-header text-center">  
-          <div>   
-            <h2 class="section-title">Completed Projects</h2>
-            <div class="desc-text">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do</p>  
-              <p>eiusmod tempor incididunt ut labore et dolore.</p>
-            </div>
-          </div> 
-        </div>
-      </div>
 
-    </div>
-    <!-- End Row -->
-    <!-- Start Row -->
-    <div class="row">
-
-      {% for project in completed_projects %}
-        
-     
-      <!-- Start Col -->
-      <div class="col-lg-4 col-md-6 col-xs-12 blog-item">
-        <!-- Blog Item Starts -->
-        <div class="blog-item-wrapper">
-          <div class="blog-item-img">
-            <a href="{% url 'project' project.pk %}">
-              <img style="padding:2rem" src="{{project.startup.startupimage_set.all.0.image.url}}" class="img-fluid" alt="">
-            </a>             
-          </div>
-          <div class="blog-item-text"> 
-            <h3><a href="{% url 'project' project.pk %}">{{project.name}}</a></h3>
-            <p>{{project.project_details|truncatechars:100}}</p>
-            <a href="" class="read-more">{{project.startup.name}}</a>
-          </div>
-          <div class="author">
-            <span class="name"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-file-code-fill" viewBox="0 0 16 16">
-              <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM6.646 5.646a.5.5 0 1 1 .708.708L5.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zm2.708 0 2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L10.293 8 8.646 6.354a.5.5 0 1 1 .708-.708z"/>
-            </svg><a href="{% url 'community' project.community.pk %}"> {{project.community.name}}</a></span>
-            <span class="date float-right"><i class="lni-calendar"></i>{{project.time.date}}</span>
-          </div>
-        </div>
-        <!-- Blog Item Wrapper Ends-->
-      </div>
-      <!-- End Col -->
-
-      {% endfor %}
-    
-
-    </div>
-    <!-- End Row -->
-  </div>
-</section>
-<!-- blog Section End -->
-
-<!-- done projects end -->
   
 {% endblock section %}

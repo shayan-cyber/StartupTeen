@@ -227,7 +227,7 @@
             <div class="tags mb-3">
                 {% for k in project.tags.all %}
 
-                <a style="text-decoration: none; padding: 0.5rem" href="#"> #{{k.name}}</a>
+                <a style="text-decoration: none; padding: 0.5rem" href="{% url 'tag_link' j.pk %}"> #{{k.name}}</a>
 
                 {% endfor %}
 
@@ -577,8 +577,7 @@
 
         console.log('User is Logged In, sending data..');
         var url = '/approval/'
-        project = {{ project.pk }
-    }
+        project = {{ project.pk }}
     fetch(url, {
         method: 'POST',
         headers: {

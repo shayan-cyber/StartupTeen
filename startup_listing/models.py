@@ -36,7 +36,7 @@ class Profile(models.Model):
     email = models.EmailField(blank=True, null=True)
     phone = models.BigIntegerField(blank=True, null=True)
     open_to_work = models.BooleanField(default=True)
-    work_experience = models.FloatField(blank=True, null = True)
+    work_experience = models.FloatField(default=0)
     dev_type = models.CharField(max_length=20, blank=True, null=True)
     tags = models.ManyToManyField(Tags, blank=True, null=True)
 

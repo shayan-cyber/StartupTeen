@@ -1,6 +1,14 @@
 {% extends "base.html" %}{% load humanize %}
 {% block container %}
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
+<style>
+  a {
+    text-decoration: none;
+  }
+</style>
+
 <div class="container mt-5">
 
 
@@ -72,7 +80,7 @@
               <p class="card-text">{{i.project_details|truncatechars:250}}</p>
             
               {% for k in i.tags.all %}
-                  <a style="text-decoration: none; padding: 0.5rem; color: #0d6efd; font-weight: bold;" href="#">
+                  <a style="text-decoration: none; padding: 0.5rem; color: #0d6efd; font-weight: bold;" href="{% url 'tag_link' j.pk %}">
                     #{{k.name}}</a>
 
                 {% endfor %}
@@ -95,31 +103,76 @@
 </div>
 
 
-<div class="container mt-5">
-
-    <h2><strong>Past Complete Projects</strong></h2>
-
-    <div class="row mt-5">
-
-        {% for project in past_projects %}
-
-        <div class="col-lg-3 col-sm-12">
-            <div class="box-shadow p-5">
-                <h4>{{project.name}}</h4>
-                <span class="badge rounded-pill bg-dark text-light mb-2">{{project.community.name}}</span>
-                <br>
-                <p>{{project.project_details|truncatechars:100}}</p>
-                <br>
-                <small style="font-weight: lighter;">{{project.time|naturaltime}}</small>
-
-            </div>
-        </div>
-          
-        {% endfor %}
-        
-       
-    </div>
-
-</div>
 
 {% endblock container %}
+
+
+
+{% block section %}
+
+
+
+<!-- done projects start-->
+ <!-- Blog Section -->
+ <section id="blog" class="section mt-4">
+  <!-- Container Starts -->
+  <div class="container">
+    <!-- Start Row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="blog-text section-header text-center">  
+          <div>   
+            <h2 class="section-title">Past Completed Projects</h2>
+            <div class="desc-text">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do</p>  
+              <p>eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+          </div> 
+        </div>
+      </div>
+
+    </div>
+    <!-- End Row -->
+    <!-- Start Row -->
+    <div class="row">
+
+      {% for project in past_projects %}
+        
+     
+      <!-- Start Col -->
+      <div class="col-lg-3 col-md-4 col-xs-12 blog-item mt-4">
+        <!-- Blog Item Starts -->
+        <div class="blog-item-wrapper">
+          <div class="blog-item-img">
+            <a href="{% url 'project' project.pk %}">
+              <img style="padding:2rem; " src="{{project.community.logo.url}}" class="img-fluid" alt="">
+            </a>             
+          </div>
+          <div class="blog-item-text"> 
+            <h3><a href="{% url 'project' project.pk %}">{{project.name}}</a></h3>
+            <p>{{project.project_details|truncatechars:100}}</p>
+            <a href="" class="read-more">{{project.startup.name}}</a>
+          </div>
+          <div class="author">
+            <span class="name"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-file-code-fill" viewBox="0 0 16 16">
+              <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM6.646 5.646a.5.5 0 1 1 .708.708L5.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zm2.708 0 2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L10.293 8 8.646 6.354a.5.5 0 1 1 .708-.708z"/>
+            </svg><a href="{% url 'community' project.community.pk %}"> {{project.community.name}}</a></span>
+            <span class="date float-right"><i class="lni-calendar"></i>{{project.time.date}}</span>
+          </div>
+        </div>
+        <!-- Blog Item Wrapper Ends-->
+      </div>
+      <!-- End Col -->
+
+      {% endfor %}
+    
+
+    </div>
+    <!-- End Row -->
+  </div>
+</section>
+<!-- blog Section End -->
+
+<!-- done projects end -->
+  
+{% endblock section %}

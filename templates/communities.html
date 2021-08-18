@@ -1,24 +1,67 @@
 {% extends 'base.html' %} {% block container %}
 <div class="container mt-5">
   <div class="d-flex justify-content-evenly">
+    <form method="post" style="width: 100%" action="{% url 'communities' %}">{% csrf_token %}
     <div style="width: 100%" class="row">
+      
       <div class="col-8">
         <input
           class="form-control"
           type="text"
+          name="community"
           placeholder="search for communities..."
         />
       </div>
 
       <div class="col-4">
-        <button class="btn btn-outline-secondary">Search</button>
+        <button type="submit" class="btn btn-primary">Search</button>
       </div>
+    
     </div>
+  </form>
   </div>
 </div>
 <br />
 <div class="container mt-3">
   <div class="row">
+    {% if search_results %}
+    <h4 style="font-size: 1.8rem;" class="text-center"><strong>Search Results</strong></h4>
+    
+    {% for i in search_results %}
+    <div class="col-sm-12 col-lg-4 col-md-4 mt-5">
+      <a style="text-decoration: none;" href="{% url 'community' i.pk %}">
+        <div class="card border-primary mb-3">
+          <div class="card-header">
+            {{i.pk}}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-people-fill"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"
+              />
+              <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+            </svg>
+          </div>
+          <div class="card-body text-primary">
+            <h5 class="card-title">{{i.name}}</h5>
+            <p class="card-text">{{i.about|truncatechars:100}}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+      
+    {% endfor %}
+    
+    {% else %}
     {% for i in communities %}
     <div class="col-sm-12 col-lg-4 col-md-4">
       <a style="text-decoration: none;" href="{% url 'community' i.pk %}">
@@ -52,6 +95,9 @@
     </div>
 
     {% endfor %}
+      
+    {% endif %}
+    
   </div>
 </div>
 

@@ -76,24 +76,28 @@ body {
           </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto w-100 justify-content-end">
-              <li class="nav-item">
-                <a class="nav-link page-scroll" href="#home">Home</a>
+              <li class="nav-item active">
+                <a class="nav-link page-scroll active" href="/">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#services">About</a>
+                <a class="nav-link page-scroll" href="{% url 'communities' %}">Communities</a>
               </li>  
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#features">Services</a>
-              </li>                            
+                <a class="nav-link page-scroll" href="{% url 'explore_section' %}">Explore</a>
+              </li>
+              {% if request.user.profile.typ_of == "OWN" %}
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#showcase">Showcase</a>
-              </li>       
-              <li class="nav-item">
+                <a class="nav-link page-scroll" href="{% url 'startup_dashboard' %}">Dashboard</a>
+              </li>
+                
+              {% endif %}                            
+                    
+              <!-- <li class="nav-item">
                 <a class="nav-link page-scroll" href="#pricing">Pricing</a>
               </li>     
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="#team">Team</a>
-              </li> 
+              </li>  -->
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="#blog">Blog</a>
               </li>  
@@ -101,8 +105,29 @@ body {
                 <a class="nav-link page-scroll" href="#contact">Contact</a>
               </li> 
               <li class="nav-item">
-                <a class="btn btn-singin" href="#">Download</a>
+                {% if request.user.is_authenticated %}
+
+                <a class="btn btn-singin" href="{% url 'log_out' %}">Log Out</a>
+                  {% else %}
+                
+                <a class="btn btn-singin" href="{% url 'login_page' %}">Sign In</a>
+                {% endif %}
               </li>
+              {% if request.user.is_authenticated %}
+
+              <li class="nav-item">
+                <a href="{% url 'profile' request.user.username %}" class="nav-link">{{request.user.username}}</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'profile' request.user.username %}">
+
+                  <img style="width:3rem; height:3rem; margin-left:1rem; margin-top:-0.3rem" class="rounded-circle" src="{{request.user.profile.image.url}}" alt="">
+
+                </a>
+                
+              </li>
+                
+              {% endif %}
             </ul>
           </div>
         </div>
@@ -132,10 +157,14 @@ body {
 
     <!-- Services Section Start -->
     <section id="services" class="section">
+      <div class="features-text section-header text-center">
+        <h2 class="section-title">Communities</h2>
+      </div>
+      
       <div class="container">
 
         <div class="row">
-          {% for i in communities %}
+          {% for i in communities|slice:":3" %}
           <!-- Start Col -->
           <div class="col-lg-4 col-md-6 col-xs-12">
             <div class="services-item text-center">
@@ -152,6 +181,9 @@ body {
         {% endfor %}
 
         </div>
+      </div>
+      <div style="width:50vw" class="text-center container mt-5 p-5">
+        <a href="{% url 'communities' %}" class="btn btn-primary btn-sm btn-block">More Communities <img style="margin-bottom: 0.1rem;" src="https://img.icons8.com/ios/24/000000/connection-status-off.png"/></a>
       </div>
     </section>
     <!-- Services Section End -->
@@ -320,7 +352,7 @@ body {
           <div class="col-lg-12">
             <div class="showcase-text section-header text-center">  
               <div>   
-                <h2 class="section-title">Recent Works</h2>
+                <h2 class="section-title">Recent Successfull Projects</h2>
                 <div class="desc-text">
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do</p>  
                   <p>eiusmod tempor incididunt ut labore et dolore.</p>
@@ -335,19 +367,21 @@ body {
         <div class="row justify-content-center showcase-area">
           <div class="col-lg-12 col-md-12 col-xs-12 pr-0">
             <div class="showcase-slider owl-carousel">
+
+              {% for project in past_projects  %}
               <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/01.jpg' %}" class="img-fluid" alt="" />
+                <div style="padding: 10%" class="screenshot-thumb">
+                  <img  src="{{project.community.logo.url}}" class="img-fluid" alt="" />
                   <div class="hover-content text-center">
                     <div class="fancy-table">
                       <div class="table-cell">
                         <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
+                          <p>{{project.community.name}}</p>
+                          <h5>{{project.name}}</h5>
                         </div>
                         <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
+                          <a class="lightbox" href="{{project.startup.startupimage_set.all.0.image.url}}"><i class="lni-zoom-in"></i></a>
+                          <a href="{% url 'project' project.pk %}"><i class="lni-link"></i></a>
                         </div>
                       </div>
                     </div>
@@ -355,370 +389,10 @@ body {
 
                 </div>
               </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/02.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/02.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/03.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/03.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/04.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/04.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/05.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/05.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/01.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/02.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/02.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/03.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/03.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/04.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/04.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/05.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/05.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/01.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/02.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/03.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/04.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/05.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/01.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/02.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/03.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/04.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img src="{% static 'landing_page_assets/img/showcase/05.jpg' %}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="{% static 'landing_page_assets/img/showcase/01.jpg' %}"><i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                
+              {% endfor %}
+              
+              
              
 
               
