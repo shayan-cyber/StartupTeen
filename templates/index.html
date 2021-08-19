@@ -89,7 +89,7 @@ body {
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="{% url 'explore_section' %}">Explore</a>
               </li>
-              {% if request.user.profile.typ_of == "OWN" %}
+              {% if request.user.profile.type_of == "OWN" %}
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="{% url 'startup_dashboard' %}">Dashboard</a>
               </li>
@@ -187,7 +187,7 @@ body {
         </div>
       </div>
       <div style="width:50vw" class="text-center container mt-5 p-5">
-        <a href="{% url 'communities' %}" class="btn btn-primary btn-sm btn-block">More Communities <img style="margin-bottom: 0.1rem;" src="https://img.icons8.com/ios/24/000000/connection-status-off.png"/></a>
+        <a href="{% url 'communities' %}" class="btn btn-primary btn-sm btn-block">More</a>
       </div>
     </section>
     <!-- Services Section End -->
