@@ -6,6 +6,9 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
 # Create your views here.
 def home(request):
     communities = Community.objects.all()
@@ -748,6 +751,38 @@ def explore_section(request):
     return render(request, 'explore_section.html', context)
 
 
+
+def contact_us(request):
+    if request.method == 'POST':
+        name = request.POST.get('name','')
+        email = request.POST.get('email','')
+        msg_subject = request.POST.get('msg_subject','')
+        message = request.POST.get('msg', '')
+        email_context = {
+            "name":name,
+            "msg_subject":msg_subject,
+            "message":message,
+            "email":email
+        }
+        template_email = render_to_string('email/email_template.html', email_context)
+
+        email_obj = EmailMessage(
+
+            name + " has sent an email",
+            template_email,
+            settings.EMAIL_HOST_USER,
+            ['debroyshayan@gmail.com', 'contact@thestartupteens.com']
+            
+        )
+        email_obj.fail_silently = False
+        email_obj.send()
+        print(email_obj)
+        messages.success(request, "We have received your mail")
+
+        return redirect('/')
+
+    else:
+        raise Http404()
 
 
 def log_out(request):

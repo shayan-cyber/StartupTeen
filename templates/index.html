@@ -6,9 +6,13 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="keywords" content="Bootstrap, Landing page, Template, Business, Service">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- custom keywords -->
+    <meta name="keywords" content="Startup, StartupTeens, Developers, Web Development, Software, Project">
     <meta name="author" content="Shayan Debroy">
+    <meta name="description" content="StartupTeens is a one-stop solution for mentorship & resources for budding developers and entrepreneurs!">
+
+    <!-- end -->
     <title>StartupTeens -- Home</title>
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="img/2.png" type="image/png">
@@ -70,7 +74,7 @@ body {
       </div>
       <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
         <div class="container">
-          <a href="index.html" class="navbar-brand"><img src="{% static 'landing_page_assets/img/logo.png' %}" alt=""></a>       
+          <a href="index.html" class="navbar-brand"><img style="width:4rem; height:4rem" src="{% static 'STlogonew.png' %}" alt=""></a>       
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <i class="lni-menu"></i>
           </button>
@@ -99,7 +103,7 @@ body {
                 <a class="nav-link page-scroll" href="#team">Team</a>
               </li>  -->
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#blog">Blog</a>
+                <a class="nav-link page-scroll" href="https://www.thestartupteens.com/">Blog</a>
               </li>  
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="#contact">Contact</a>
@@ -136,8 +140,8 @@ body {
         <div class="row space-100">
           <div class="col-lg-6 col-md-12 col-xs-12">
             <div class="contents">
-              <h2 class="head-title">Lorem ipsum dolor sit.</h2>
-              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo, consequuntur.</p>
+              <h2 class="head-title">The SaaS for Startups and Developers</h2>
+              <p>Developers. Startups. We're there from day one with the resources</p>
               <div class="header-button">
                 <a href="{%  url 'communities' %}" rel="nofollow"  class="btn btn-border-filled">Developer </a>
                 <a href="{% url 'startup_dashboard' %}" rel="nofollow" class="btn btn-border page-scroll">Startup </a>
@@ -205,10 +209,13 @@ body {
           <!-- Start Col -->
           <div class="col-lg-6 col-md-12 pl-4">
             <div class="business-item-info">
-              <h3>Crafted For Business, Startup and Agency Websites</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do <br> tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim <br> veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea <br> commodo consequat. Duis aute irure dolor in reprehenderit in voluptate <br> velit esse cillum dolore eu fugiat nulla pariatur.</p>
+              <h3>Inspiring creativity and entrepreneurship.</h3>
+              <p>To empower and connect young entrepreneurs  to develop technological solutions which solve major challenges in our world. <br> 
+                <br>
+                Startup founders that are looking to get their ideas off the ground and need a team of developers. They want to find a team of developers who can create an online platform . This platform would match users with a team of developers based on their needs and budget.
+              </p>
 
-              <a class="btn btn-common" href="#">download</a>
+              <a class="btn btn-common" href="{% url 'explore_section' %}">Explore</a>
             </div>
           </div>
           <!-- End Col -->
@@ -230,7 +237,9 @@ body {
               <div>   
                 <h2 class="section-title">Services We Provide</h2>
                 <div class="desc-text">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do <br> eiusmod tempor incididunt ut labore et dolore.</p>
+                  <p>
+                    Find & Hire The Best Developers: Finding and hiring the right developer for your business is difficult. I help you find great developers by connecting with leveraging their network in a unique way.
+                  </p>
                 </div>
               </div> 
             </div>
@@ -518,14 +527,12 @@ body {
               <div class="item">
                 <div class="testimonial-item">
                   <div class="content-inner">
-                    <p class="description">Appropriately implement one-to-one catalysts for change <br> vis-a-vis wireless catalysts for change. Enthusiastically architect <br> adaptive e-tailers after sustainable total linkage. Appropriately <br> implement one-to-one catalysts for change.</p>
+                    <p class="description">StartupTeens is a great way for developers to learn more about coding and startups. The site has loads of content as well as a great community.</p>
                     <div class="author-info">
-                      <h5>Tahmina Anny ; <span> UIdeck Customer</span></h5>
+                      <h5><span> UIdeck Customer</span></h5>
                     </div>
                   </div>
-                  <div class="client-thumb">
-                    <img src="{% static 'landing_page_assets/img/testimonial/01.png' %}" alt="">
-                  </div>
+                  
                 </div>
               </div>
               <div class="item">
@@ -837,6 +844,18 @@ body {
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do</p>  
                   <p>eiusmod tempor incididunt ut labore et dolore.</p>
                 </div>
+                <br>
+                {% for msg in messages %}
+
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>Thanks For Feedback! </strong> {{msg}}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                  
+                {% endfor %}
+                
               </div> 
             </div>
           </div>
@@ -847,32 +866,27 @@ body {
         <div class="row">
           <!-- Start Col -->
           <div class="col-lg-6 col-md-12">
-          <form id="contactForm">
+          <form action="{% url 'contact_us' %}" method="post" id="contactForm">{% csrf_token %}
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="form-group">
                   <input type="text" class="form-control" id="name" name="name" placeholder="Name" required data-error="Please enter your name">
                   <div class="help-block with-errors"></div>
                 </div>                                 
               </div>
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="form-group">
                   <input type="text" placeholder="Subject" id="msg_subject" class="form-control" name="msg_subject" required data-error="Please enter your subject">
                   <div class="help-block with-errors"></div>
                 </div> 
               </div>
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="form-group">
                   <input type="text" class="form-control" id="email" name="email" placeholder="Email" required data-error="Please enter your Email">
                   <div class="help-block with-errors"></div>
                 </div>                                 
               </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <input type="text" placeholder="Budget" id="budget" class="form-control" name="budget" required data-error="Please enter your Budget">
-                  <div class="help-block with-errors"></div>
-                </div> 
-              </div>
+             
               <div class="col-md-12">
                 <div class="form-group"> 
                   <textarea class="form-control" id="message"  name="message" placeholder="Write Message" rows="4" data-error="Write your message" required></textarea>

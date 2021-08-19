@@ -141,6 +141,13 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+#email backends
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'devop7439@gmail.com'
+EMAIL_HOST_PASSWORD = 'kakashihatake'
+EMAIL_USE_TLS = True
+
 
 #alauth settings
 

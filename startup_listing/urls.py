@@ -29,5 +29,6 @@ urlpatterns = [
     path('completed_project/<int:pk>', views.completed_project, name="completed_project"),
     path('tag_link/<int:pk>', views.tag_link, name="tag_link"),
     path('explore_section', views.explore_section, name="explore_section"),
+    path('contact_us', views.contact_us, name="contact_us"),
     path('log_out', views.log_out, name="log_out")
 ]

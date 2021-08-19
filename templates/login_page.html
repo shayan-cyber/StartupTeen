@@ -61,32 +61,38 @@
   
     <nav style=" background: linear-gradient(95deg, #5533ff 40%, #25ddf5 100%);" class="navbar navbar-expand-md  fixed-top scrolling-navbar">
       <div class="container">
-        <a href="index.html" class="navbar-brand"><img src="{% static 'landing_page_assets/img/logo.png' %}" alt=""></a>       
+        <a href="index.html" class="navbar-brand"><img style="width:4rem; height:4rem" src="{% static 'STlogonew.png' %}" alt=""></a>       
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <i class="lni-menu"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto w-100 justify-content-end">
-            <li class="nav-item">
-              <a class="nav-link page-scroll" href="#home">Home</a>
+            <li class="nav-item active">
+              <a class="nav-link page-scroll " href="/">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link page-scroll" href="#services">About</a>
+              <a class="nav-link page-scroll" href="{% url 'communities' %}">Communities</a>
             </li>  
             <li class="nav-item">
-              <a class="nav-link page-scroll" href="#features">Services</a>
-            </li>                            
-                
+              <a class="nav-link page-scroll" href="{% url 'explore_section' %}">Explore</a>
+            </li>
+            {% if request.user.profile.type_of == "OWN" %}
+            <li class="nav-item">
+              <a class="nav-link page-scroll" href="{% url 'startup_dashboard' %}">Dashboard</a>
+            </li>
+              
+            {% endif %}                            
+                  
+            <!-- <li class="nav-item">
+              <a class="nav-link page-scroll" href="#pricing">Pricing</a>
+            </li>     
             <li class="nav-item">
               <a class="nav-link page-scroll" href="#team">Team</a>
-            </li> 
-            <li class="nav-item">
-              <a class="nav-link page-scroll" href="#blog">Blog</a>
-            </li>  
-            <li class="nav-item">
-              <a class="nav-link page-scroll" href="#contact">Contact</a>
-            </li> 
+            </li>  -->
             
+            <li class="nav-item">
+              <a class="nav-link page-scroll" href="/#contact">Contact</a>
+            </li> 
             <li class="nav-item">
               {% if request.user.is_authenticated %}
 
@@ -111,7 +117,6 @@
             </li>
               
             {% endif %}
-            
           </ul>
         </div>
       </div>

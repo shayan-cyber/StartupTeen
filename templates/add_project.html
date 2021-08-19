@@ -6,11 +6,11 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Startup Dashboard <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">StartupTeens</div>
     </a>
 
     <!-- Divider -->
@@ -18,7 +18,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item ">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="{% url 'startup_dashboard' %}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -44,7 +44,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
             aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-wrench"></i>
+            <i class="fas fa-project-diagram"></i>
             <span>Projects</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
@@ -76,7 +76,7 @@
     <li class="nav-item ">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFormfields"
             aria-expanded="true" aria-controls="collapseFormfields">
-            <i class="fas fa-fw fa-wrench"></i>
+            <i class="fas fa-tools"></i>
             <span>Build Form</span>
         </a>
         <div id="collapseFormfields" class="collapse" aria-labelledby="headingFormfields"
@@ -103,20 +103,15 @@
 
     <li class="nav-item">
         <a class="nav-link" href="{% url 'add_tags' %}">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-hashtag"></i>
             <span>Add Tags</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'add_benefits' %}">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fab fa-buffer"></i>
             <span>Add Benefits</span></a>
     </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
-    </li>
+    
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
@@ -129,8 +124,8 @@
     <!-- Sidebar Message -->
     <div class="sidebar-card d-none d-lg-flex">
         <img class="sidebar-card-illustration mb-2" src="{% static 'img/undraw_rocket.svg' %}" alt="...">
-        <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-        <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+        <p class="text-center mb-2"><strong>StartupTeens</strong></p>
+        <a class="btn btn-success btn-sm" href="/">Home</a>
     </div>
 
 </ul>
@@ -146,11 +141,7 @@
 <div>
 
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Projects</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-    </div>
+    
 
     <!-- Content Row -->
     <div class="row">
