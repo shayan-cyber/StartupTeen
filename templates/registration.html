@@ -392,7 +392,12 @@
             <br>
             <!-- <span id="enteredLastName">Ji-Hun C</span> <br />
             Phone: <span id="enteredPhoneNumber">+230-582-6609</span> <br /> -->
+            {% if request.user.eamil %}
+
             Email: <span id="enteredEmailAddress">{{request.user.email}}</span>
+              
+            {% endif %}
+           
           </p>
 
 

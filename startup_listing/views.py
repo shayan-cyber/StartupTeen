@@ -139,6 +139,8 @@ def profile(request, username):
 
         }
         return render(request, "profile_owner.html", context)
+    else:
+        return redirect('/register')
 
 
 
@@ -242,7 +244,7 @@ def profile_edit(request, username):
 
             
         else:
-            pass
+            return redirect('/register')
         
     else:
         raise Http404()
@@ -316,7 +318,7 @@ def add_project(request):
         context = {'startup':startup, 'communities':communities, 'tags':tags_objs,'skills':skill_objs,'benefits':benefit_objs}
         return render(request, "add_project.html", context)
     else:
-        pass
+        return redirect('/add_startup')
     #404 no startup
 
 
@@ -625,7 +627,7 @@ def add_startup(request):
 
     else:
         # you dont have an owner account
-        raise Http404()
+        return redirect('/register')
 @login_required(login_url='/login_page')
 def startup_dashboard(request):
     # startup = get_object_or_404(StartUp, owner = request.user.profile)
